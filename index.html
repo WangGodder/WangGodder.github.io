@@ -64,6 +64,8 @@
     			
             
     			
+            
+    			
     			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
     			
             
@@ -326,7 +328,7 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross modal</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
         		</li>
       		
 		</ul>
@@ -337,6 +339,397 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/19/Cycle-Consistent%20Deep%20Generative%20Hashing%20for%20Cross-Modal%20Retrieval/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Self-Supervised Adversarial Hashing Networks for Cross-Modal Retrieval" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/">Self-Supervised Adversarial Hashing Networks for Cross-Modal Retrieval</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
+  	<time datetime="2019-04-14T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="from-CVPR-2018"><a href="#from-CVPR-2018" class="headerlink" title="from CVPR 2018"></a>from CVPR 2018</h5><h4 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h4><p>本文采用2个对抗网络来影响不同模态之间的相关性，并将标签作为训练样本，放入生成器生成对应的语义来供其他网络学习。本文采用multi-label的形式来表述label与对象之间的关系(即一个对象可能有多个label)。</p>
+<h4 id="network-and-loss"><a href="#network-and-loss" class="headerlink" title="network and loss"></a>network and loss</h4><p><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval1.jpg" alt="figure 1: The framework of our proposed SSAH."></p>
+<p>本文为了说明结果，采用了图像模态和文本模态的双模态分类。网络结构如上图，其中包含了两个特征提取网络：图像特征提取网络ImgNet与文本特征提取网络TxtNet。以及用来将label用于语义生成的labNet，还有结合ImgNet与labNet输出的辨别器D1，和结合TxtNet输出与LabNet输出的辨别器D2。</p>
+<h5 id="network-struct"><a href="#network-struct" class="headerlink" title="network struct"></a>network struct</h5><p>网络结构采用了目前CMH常见的网络模型。<br>ImgNet采用CNN-F模型，将最后的全连接层改为hash输出层，结构如下<br><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval4.jpg" alt=""></p>
+<p>这里采用了其他论文中的描述，但与实际有些许不服，即最后fch8应为N，这里的N为hash code长度+分类标签个数，后续相同。<br>TxtNet使用了融合标签(MS)，每一层MS由一个average pooling + 1×1的conv构成，结构如下<br><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval2.jpg" alt=""></p>
+<p>特征提取网络(ImgNet and TxtNet)均采用relu作为激活函数<br>LabNet采用全连接层的方式，即（label -&gt; 4096 -&gt; 512 -&gt; N），采用sigmoid作为激活函数<br>对抗网络D(D1,D2相同)也是采用全连接层的方式，即(feature -&gt; 4096 -&gt; 4096 -&gt; 1),采用tanh作为激活函数</p>
+<h5 id="loss"><a href="#loss" class="headerlink" title="loss"></a>loss</h5><p>首先我们定义两个实例的相似度S<del>i,j</del>，由于是多标签情况，所以只要两个实例有一个共同的标签，即表示两个实例是相似的，S<del>i，j</del>=1，否之S<del>i，j</del>=0.<br>其次，labNet的输入标签我们称为inputLabel，输出的分类标签label，其中label的维度在1×N ，与inputLabel的表示含义及其维度不同<br>$$<br>我们用F^l表示LabNet的特征，F^v表示ImgNet输出的特征，F^t表示TxtNet输出的特征<br>$$</p>
+<p>$$<br>我们用H^l表示LabNet的hash，H^v表示ImgNet输出的hash，H^t表示TxtNet输出的hash<br>$$</p>
+<p>$$<br>对于hash的学习，我们定义B^{v,t}\in{-1, 1}^K,这里K为hash的长度<br>$$</p>
+<h6 id="semantic-generation-loss"><a href="#semantic-generation-loss" class="headerlink" title="semantic generation loss"></a>semantic generation loss</h6><p><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval3.jpg" alt=""><br>$$<br>其中\Delta_{ij}^l=\frac{1}{2}(F_{<em>i}^l)^T(F_{</em>j}^l),\Gamma_{ij}^l=\frac{1}{2}(H_{<em>i}^l)^T(H_{</em>j}^l),\hat{L}^l表示预测的分类label<br>$$</p>
+<p>$$<br>这里的F^l为labelNet的fc2层的输出结果，即F^l\in R^{1\times 512}<br>$$</p>
+<p>$$<br>H^l为labelNet的输出结果的前K部分，即输出的hash~code<br>$$</p>
+<p>这里将该部分的loss分为4个部分，分别为J1相似实例间的语义loss，J2相似实例间的hashLoss，J3hash的学习loss，J4LabNet的分类loss。其中J1,J2为cross-modal的NLLloss定义。</p>
+<h6 id="feature-loss"><a href="#feature-loss" class="headerlink" title="feature loss"></a>feature loss</h6><p>由于不同的模态采用不同的网络训练，所以我们用labNet生成的特征与两个网络中的特征进行相关联，这里并没有将输出进行融合，而是将接近输出层的全连接层的输出结果进行融合，这样既保证了特征的提取的有效性，又方便BP针对性的更新网络。<br><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval5.jpg" alt=""><br>$$<br>其中\Delta_{ij}^l=\frac{1}{2}(F_{<em>i}^l)^T(F_{</em>j}^{v(t)}),\Gamma_{ij}^l=\frac{1}{2}(H_{<em>i}^l)^T(H_{</em>j}^{v(t)}),\hat{L}^{v(t)}表示特征网络预测的分类label<br>$$<br>这里的公式表示和上述相同，这里通过乘积将labNet的输出与特征提取网络的特征进行相关，利用labNet的自监督学习的结果作为可信的标签</p>
+<h6 id="adversarial-loss"><a href="#adversarial-loss" class="headerlink" title="adversarial loss"></a>adversarial loss</h6><p>由于不同模态之间的间隔，我们通过labNet进行缩短间隔，那么用于缩短间隔的部分就是分辨网络D<br>我们定义两个实例的hash的Hamming距离为dis(bi,bj)=1/2(K-&lt;bi,bj&gt;),其中&lt;bi,bj&gt;为两个hash向量的内积运算，如果两个hash之间相似，那么内积的结果应该接近K(hash的长度,b中只包含-1和1两个值)</p>
+<p><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval6.jpg" alt=""><br>$$<br>其中x_i^{\star,l}为图像(文本)语义与labNet语义的共同语义特征<br>$$</p>
+<p>$$<br>y_i^{\star,l}= \begin{cases}0 &amp; if<del>labels</del>for<del>image(text) \ 1 &amp; if</del>labels ~ for ~inputLabel\end{cases}<br>$$</p>
+<p>这里对于每个D，使得D的输出接近于 真实的label的来源</p>
+<h6 id="optimization"><a href="#optimization" class="headerlink" title="optimization"></a>optimization</h6><p>本文中包含了3个hash code，但是为了训练，我们将三个hash code结合起来，称为B，定义如下<br>$$<br>B = sign(H^v + H^t + H^l)<br>$$<br>于是类似于GAN的loss，我们定义我们的总体损失函数为 生成器的loss-辨别器的loss即<br><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval7.jpg" alt=""><br>$$<br>其中\hat{B}表示B的单位向量<br>$$<br>由于参数B的非连续性，我们采用分部的方式进行参数优化<br><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval8.jpg" alt=""></p>
+<ol>
+<li>根据labNet的输出与分类的结果求取labNet的loss，对labNet的参数进行BP优化</li>
+<li>此时我们固定labNet的参数，通过labNet的输出来同样采用BP优化ImgNet和TxtNet</li>
+<li>最后我们固定labNet、imgNet、TxtNet的参数，利用他们的输出来更新俩个分辨器的参数</li>
+<li>重复1-3步，直到训练完整个数据集</li>
+<li>最后，当我们将所有的数据集训练后，我们根据训练后ImgNet、labNet、TxtNet的最终输出(hash code)来更新我们的B（binary code），然后进入下一次epoch重复上述1-4步</li>
+</ol>
+<p>对于优化器的选择，本文选择了SGD(随机梯度下降)</p>
+<h5 id="training"><a href="#training" class="headerlink" title="training"></a>training</h5><h6 id="hyperparameter"><a href="#hyperparameter" class="headerlink" title="hyperparameter"></a>hyperparameter</h6><p>在训练中，作者对于生成器loss中的4个超参数进行测试，得出了最好的结果为<br>$$<br>\alpha=\gamma=1<del>\eta=\beta=10^{-4}</del>lr=10^{-4}to10^{-8}<br>$$</p>
+<h6 id="performance"><a href="#performance" class="headerlink" title="performance"></a>performance</h6><p><img src="/img/SSAH/Self-SupervisedAdversarialHashingNetworksforCross-ModalRetrieval9.jpg" alt=""><br>可以看出本文的SSAH结构比其他方法有明显改善，并且通过对于ImgNet的不同结构发现Vgg19的特征提取效果比CNN-F效果更好。</p>
+<h5 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h5><p>本文将label作为输入之一，并且利用label的自监督学习生成的语义特征与其他模态的语义提取进行融合，利用对抗学习使得各模态与label的距离减小，利用label作为标准，拉近不同模态之间的距离。</p>
+<p>缺点在于这里采用的mulit-label，该情况下的相似矩阵的设计过于简单，并且不能明显表明在有共同标签的对象间，标签数多的对象之间的相似性对比。</p>
+<h6 id="improvement"><a href="#improvement" class="headerlink" title="improvement"></a>improvement</h6><p>结合最近的DCMH方向的论文，本文可以对生成的hash code再次进行聚类，增加不同分类下hash code间的hamming距离<br>同时相似函数定义可以结合相关论文进行改进。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Multi-Level Factorisation Net for Person Re-Identiﬁcation" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/">Multi-Level Factorisation Net for Person Re-Identification</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/" class="archive-article-date">
+  	<time datetime="2019-04-10T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="from-CVPR-2018"><a href="#from-CVPR-2018" class="headerlink" title="from CVPR 2018"></a>from CVPR 2018</h4><h5 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h5><p>本文利用了多层结构提取不同在不同卷积深度下的表现最优的特征，然后对特征进行整合用来实现对行人的Re-ID。在Re-ID和物体检测上都表现出了很好的效果，尤其在Re:ID上达到了sota</p>
+<h5 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h5><p>对于Re-ID问题，难点在于同一人的姿态、外观等细小特征表现不同，同时对于输入的数据中还包含了摄像头的角度不同等因素，导致Re-ID成为难题。<br>对于每一个人，可以通过图像进行一些信息的提取，例如下图:<br><img src="/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation1.jpg" alt=""><br>其中很多方法是通过对于这可见的语义进行深层的特征提取，然后通过这些通过高层次的语义进行识别，但这样存在高成本和高错误的问题。<br>另外的方法是通过注意力机制对特征进行融合，但这样的做法很盲目，无法获取每层能够获取的最有效的因素特征。(例如:浅层的特征一般用于提取衣服颜色，高层的特征用于提取性别)<br>本文中采用了多级别因素提取网络，网络结构如下：<br><img src="/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation2.jpg" alt=""><br>利用该网络将得到不同层次中可以用来分类的因素，和与分类无关的因素。</p>
+<h5 id="network-architecture-and-optimisation"><a href="#network-architecture-and-optimisation" class="headerlink" title="network architecture and optimisation"></a>network architecture and optimisation</h5><h6 id="network-architecture"><a href="#network-architecture" class="headerlink" title="network architecture"></a>network architecture</h6><p>MLFN(Multi-Level Factorisation Net)网络由多个block构成，每个block(B)表示一个语义级别；每个block中包含了多个Factor Module(FM)用来提取每个因素的特征，每个FM中包含了独立多个卷积层与pooling层。Factor Selection Module(FSM)因素选择模型，用来选取该block中生效的因素，对于不生效的因素，网络进行冻结处理。网络结构与ResNeXt相似，但不同的是FM之间没有共享权重。<br><img src="/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation3.jpg" alt=""></p>
+<h6 id="1-FM"><a href="#1-FM" class="headerlink" title="1.FM"></a>1.FM</h6><p>对于每个block中，包含了K<del>n</del>个FM模型，每个block中的FM的个数不同，对于每个FM的输出如下<br>$$<br>M_{n,i}\in\R^{H_n×W_n×C_n} <del>~</del> M_{n,i}是具有H_n*W_n大小C_n通道的特征<br>$$</p>
+<h6 id="2-FSM"><a href="#2-FSM" class="headerlink" title="2.FSM"></a>2.FSM</h6><p>每个block中的FSM用来输出一个FM选择向量<br>$$<br>S_n = \delta(\overline{A}_n)<del>where</del>S_n\in\R^{1×K_n} \<br>其中\overline{A}_i为第i个FM在经过激活函数之前的值，\delta(·)表示sigmoid函数<br>$$</p>
+<h6 id="3-Block"><a href="#3-Block" class="headerlink" title="3.Block"></a>3.Block</h6><p>因此每一层block的输出为{M<del>n</del>, S<del>n</del>}，对于输出的详细格式如下:<br>$$<br>Y_n = M_n \times 4 S_n + X_n \<br>其中M_n\in\R^{H_n\times W_n\times C_n\times K_n}, \times4S_n表示第4个维度与S_n进行张量乘法，即dot(dim=4)\<br>X_n为来自上一层的输出即Y_{n-1}，最底层时X_n为输入的图像\<br>Y_n \in \R^{H_n\times W_n\times C_n}<br>$$<br>每层的block的输出特征都会被下一层所接收，这样所有的因素特征都会集中在最顶层的输出中。</p>
+<h6 id="4-Factor-Signature"><a href="#4-Factor-Signature" class="headerlink" title="4.Factor Signature"></a>4.Factor Signature</h6><p>在经过blocks的特征提取后，通过Facotr Signature层将每层的FSM进行融合，融合方式如下：<br><img src="/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation4.jpg" alt=""><br>这里的输出向量大小与输出的特征图大小无关，只与block的个数与block中FM的个数相关</p>
+<h6 id="5-Fusion"><a href="#5-Fusion" class="headerlink" title="5.Fusion"></a>5.Fusion</h6><p>该结构的特点之一就是不需要修改维度就可以进行融合，因为所有因素的特征都在最顶层block的输出Y<del>N</del>中，所以我们只需要将Y<del>N</del>与FS的输出结可，这里采用了一种类似全连接的方式，使用函数T将两个维度不同的张量映射到维度为1×d的张量上<br><img src="/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation5.jpg" alt=""></p>
+<h6 id="Optimisation"><a href="#Optimisation" class="headerlink" title="Optimisation"></a>Optimisation</h6><p>对于模型的优化，采用BP为基础，但由于loss通过BP传播到底层时，梯度值的影响降低，所以采用了short connection的方式减缓BP从顶到底的衰弱。<br>由于FS与FSM的输出相连接，所以每层的FM与FSM相连接来使BP能够通过FSM传到到FM中。<br>BP求导公式如下：<br>$$<br>M_{n,i} = F_{n,i}(x_n;\theta_{n,i})<del>其中\theta_{n,i}为第n层第i个FM的参数\<br>由于\frac{\partial Y_n}{\partial F_{n,i}} = S_{n,i}</del><br>\frac{\partial L}{\partial \theta_{n,i}} = \frac{\partial L}{\partial Y_n}<br>\frac{\partial Y_n}{\partial F_{n,i}}\frac{\partial F_{n,i}}{\partial \theta_{n,i}}\<br>得：\frac{\partial L}{\partial \theta_{n,i}} = S_{n,i}\frac{\partial L}{\partial Y_n}<br>\frac{\partial Y_n}{\partial F_{n,i}}<br>$$<br>其中对于无效得因素，其FM得参数会通过S<del>n,j</del> -&gt; 0来判断是否冻结参数。</p>
+<p>对于Re-ID问题，每一个人就是一个分类，所以对于我们得到得最终输出结果R还需要映射到1*n_class的空间内，然后通过L2距离来进行分类</p>
+<h5 id="train"><a href="#train" class="headerlink" title="train"></a>train</h5><p>在训练的时候，包含了16个blocks，每层的FM个数为32个，最后输出的R的维度d采用1024<br>对于mini-batch=64时，采用Adam优化器，mini-batch=256时，采用SGD优化器</p>
+<h5 id="improvement"><a href="#improvement" class="headerlink" title="improvement"></a>improvement</h5><p>本文中在进行对比的时候提到了DPFL模型，其效果与本文结果相近，其中采用了multi-branch来获取不同感受野下的模型，作者认为如果将该部分融入模型模型会有更好的效果。</p>
+<p>对于MLFN的输出结果R，可以通过无监督聚类的方式，增强输出向量的关系。</p>
+<p>对于本文的损失函数，仅有输出R的L2距离，而对于每个因素的特征训练，可以通过控制其他因素相同，单独训练某一个因素，进而提高每个FM对于因素的分辨能力。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">re-id</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Triplet-Based Deep Hashing Network for Cross-Modal Retrieval" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/">Triplet-Based Deep Hashing Network for Cross-Modal Retrieval</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
+  	<time datetime="2019-04-05T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="from-IEEE-2018"><a href="#from-IEEE-2018" class="headerlink" title="from IEEE 2018"></a>from IEEE 2018</h3><h5 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h5><p>本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。<br>本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。</p>
+<h5 id="network-and-loss"><a href="#network-and-loss" class="headerlink" title="network and loss"></a>network and loss</h5><h6 id="1-network-architecture"><a href="#1-network-architecture" class="headerlink" title="1.network architecture"></a>1.network architecture</h6><p>对于图像的hash提取网络，本文采用了CNN-F，仅对最后一层修改为hash code的提取层，网络结构如下<br>![CNN-F](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 1.jpg)<br>上图中 “LRN” 表示是否使用了 Local Response Normalization 即是否使用正则化处理输出结果，pool为MaxPooling</p>
+<p>对于文本的特征提取，则采用了非常简单的多层感知机模型，同样输出层由hash code提取层替换<br>![MLP](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 2.jpg)</p>
+<h6 id="2-loss"><a href="#2-loss" class="headerlink" title="2.loss"></a>2.loss</h6><p>每次进行实例选取时，会选取3个对象：positive, negative, query，其中query于positive相对于negative更加接近。这样就有了在Face net中于triplet loss相似的本文triplet label likelihood公式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 3.jpg)<br>其中F表示图像提取出的hash code，G表示文本提取出的hash code.<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 4.jpg)<br>这里α为需要调试的hyper-parameter.</p>
+<p>本文中将loss分成3个部分，分别为inter-modal triplet loss, intra-modal triplet loss, graph regularization loss</p>
+<h6 id="inter-modal-triplet-loss"><a href="#inter-modal-triplet-loss" class="headerlink" title="inter-modal triplet loss"></a>inter-modal triplet loss</h6><p>用来区分同一类的不同模态之间的hash code的距离，即用来区分同一类内图像和文本之间的距离。<br>其中，Image to Text 的 inter-modal triplet loss 表示为：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 5.jpg)<br>Text to Image 的 inter-modal triplet loss 表示为：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 6.jpg)<br>这里通过将query对象选取与positive对象同类但不同形态的对象，通过loss的减少来缩短同类型下不同模态对象之间的hash code的hamming distance，同时增加不同类型之间不同模态对象的距离<br>最后 得到的inter-modal triplet loss = J<del>1</del> + J <del>2</del> </p>
+<h6 id="intra-modal-triplet-loss"><a href="#intra-modal-triplet-loss" class="headerlink" title="intra-modal triplet loss"></a>intra-modal triplet loss</h6><p>用来区分同一模态下对象之间的分类距离。<br>其中对于图像类型的对象采用如下计算方式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 7.jpg)<br>对于文本类型对象采用如下计算方式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 8.jpg)<br>最后得到intra-modal triplet loss = J<del>3</del> + J<del>4</del></p>
+<h6 id="graph-regularization-loss"><a href="#graph-regularization-loss" class="headerlink" title="graph regularization loss"></a>graph regularization loss</h6><p>通过图谱的之间的距离分类，对得到的hash code进行无监督分类</p>
+<p>这里B^x^ B^y^ 分别是从文本模态和图像模态得出的hash code，||A||<del>F</del> 表示矩阵A的Frobenius norm，计算如下：<br>$$<br>||A||<em>F = \sqrt{\sum</em>{i=1}^m\sum_{j=1}^n|a_{i,j}|^2} = \sqrt{tr(A^HA)} \<br>其中A^H为A的共轭矩阵<br>$$<br>L为B的拉普拉斯矩阵（L = D - S 度矩阵 - 邻接矩阵）,γ、η、β为用来平衡的参数，文中并没给出训练时的取值，但给出在验证集上的的取值依次为100，50，1<br>对于图谱的学习过程，可由下式表出：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 10.jpg)</p>
+<p>上述三种loss可以理解为：不同模态之间的距离，同模态之间的距离，得出hash code的聚类距离<br>于是得到我们的目标函数<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 11.jpg)<br>其中B是聚类的hash code， w<del>x</del> 为text模态的权重，w<del>y</del> 为image模态的权重</p>
+<h5 id="3-training"><a href="#3-training" class="headerlink" title="3.training"></a>3.training</h5><p>对于三个目标的优化，本文采用固定两个，优化一个的方式。训练方式如下：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 12.jpg)<br>这里标出了query对象的选取方式，对于每个batch，先对CNN-F进行训练，然后训练MPL模型</p>
+<h6 id="updating-B"><a href="#updating-B" class="headerlink" title="updating B"></a>updating B</h6><p>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 13.jpg)<br>当CNN-F和MPL的参数确定后，就可以用来更新B的输出，此时loss只有graph regularization loss在起作用，这里sign(x) = 1 if x &gt;= 0 else 0<br>identity matrix 为 单位矩阵</p>
+<h6 id="updating-wx"><a href="#updating-wx" class="headerlink" title="updating wx"></a>updating w<del>x</del></h6><p>当B确定的时候，我们按照训练过程，我们首先更新w<del>x</del>的值，通过SGD优化器进行BP优化参数。<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 14.jpg)</p>
+<h6 id="updating-wy"><a href="#updating-wy" class="headerlink" title="updating wy"></a>updating w<del>y</del></h6><p>这里和上述类似，公式如下：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 15.jpg)</p>
+<h6 id="triplet-sample"><a href="#triplet-sample" class="headerlink" title="triplet sample"></a>triplet sample</h6><p>对于每次迭代如何选取query对象，这里给出了明确说明。<br>在每次随机选取P个 anchor，然后随机选取M1个正样本和M2个负样本，保证anchor到正样本的距离比到负样本距离短。这样就获得了P * M1 * M2个triplet sample</p>
+<h5 id="performance"><a href="#performance" class="headerlink" title="performance"></a>performance</h5><p>本文对于该方法的表现，发现文本任务的结果比图像任务的结果更好，认为图像中包含的语义较文本更少。</p>
+<h5 id="improve"><a href="#improve" class="headerlink" title="improve"></a>improve</h5><p>个人认为，本文对于图像的特征提取网络模型过于简单，导致认为图像中的语义包含较少，同时对于MPL不能很好的检测出文本的语义时间序列关系。</p>
+<p>由于CNN的特性，导致特征提取的空间关系较弱，建议采用更深的网络结构，同时融合不同感受野下的特征，增强特征空间关系，同时对于深层特征能够跟好的提取。另外应该抛弃全连接层，转而用1×1的卷积来代替，这样能够减少训练耗时。</p>
+<p>对于MPL，本文中的模型虽然较CNN-F能够提取出较多的特征，但由于文本的特性，其特征简单易提取，但MPL有可能忽略的文本中上下文关系，建议采用LSTM结构，对文本特征进行上下文的特征结合，获取更精确的特征。<br>关于Text的特征提取，建议参考《Cross-Modal Scene Networks》 IEEE 2018</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-图像处理----图像金字塔" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/21/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86----%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/">图像处理----图像金字塔</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/21/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86----%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/" class="archive-article-date">
+  	<time datetime="2018-11-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>图像金字塔是一种以多分辨率来解释图像的有效但概念简单的结构。应用于图像分割，机器视觉和图像压缩。一幅图像的金字塔是一系列以金字塔形状排列的分辨率逐步降低，且来源于同一张原始图的图像集合。其通过梯次向下采样获得，直到达到某个终止条件才停止采样。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。我们将一层一层的图像比喻成金字塔，层级越高，则图像越小，分辨率越低。</p>
+<ol>
+<li><p>高斯金字塔</p>
+<p>高斯金字塔式在Sift算子中提出来的概念，首先高斯金字塔并不是一个金字塔，而是有很多组（Octave）金字塔构成，并且每组金字塔都包含若干层（Interval）<br>高斯金字塔构建过程：</p>
+<pre><code>1. 先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层，高斯卷积函数为：</code></pre><p><img src="https://img-blog.csdn.net/20160917205739118" alt="img"></p>
+<p>​    对于参数σ，在Sift算子中取的是固定值1.6</p>
+<pre><code>2. 将σ乘以一个比例系数k,等到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。
+3. 如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。
+4. 将第1组倒数第三层图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后再对第2组的图像做如上高斯平滑(高斯卷积) ... 如此得到多组图像</code></pre><p><strong>在同一组内，不同层图像的尺寸是一样的，后一层图像的高斯平滑因子σ是前一层图像平滑因子的k倍；在不同组内，后一组第一个图像是前一组倒数第三个图像的二分之一采样，图像大小是前一组的一半；</strong></p>
+<p>高斯金字塔是通过高斯平滑和亚采样获得一些列下采样图像，也就是说第K层高斯金字塔通过平滑、亚采样就可以获得K+1层高斯图像，高斯金字塔包含了一系列低通滤波器，其截至频率从上一层到下一层是以因子2逐渐增加，所以高斯金字塔可以跨越很大的频率范围。<br><img src="https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=1d66c2a4df88d43fe4a499a01c77b97e/42166d224f4a20a4a746591699529822730ed083.jpg" alt="img"><br>对图像的向下取样(缩小图像, 分辨率提高)<br>为了获取层级为 G_i+1 的金字塔图像，我们采用如下方法:</p>
+<p>​    &lt;1&gt; 对图像G_i进行高斯内核卷积</p>
+<p>​    &lt;2&gt; 将所有偶数行和列去除<br>​    ==结果图像只有原图的四分之一==, 向下取样会逐渐丢失图像的信息</p>
+<p>对图像的向上取样(放大图像, 分辨率降低)<br>​    &lt;1&gt; 将图像在每个方向扩大为原来的两倍，新增的行和列以0填充</p>
+<p>​    &lt;2&gt; 使用先前同样的内核(乘以4)与放大后的图像卷积，获得 “新增像素”的近似值</p>
+</li>
+<li><p>DOG金字塔(差分(Difference of Gaussian)金字塔)<br>DOG金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。概括为DOG金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。<br><img src="https://img-blog.csdn.net/20160917223500317" alt="img"><br>然后对这些DOG图像进行==归一化==，可有很明显的看到差分图像所蕴含的特征，并且有一些特征是在不同模糊程度、不同尺度下都存在的，这些特征正是Sift所要提取的“稳定”特征</p>
+</li>
+<li><p>拉普拉斯金字塔（应用于图像融合）(减少信息丢失)<br>是高斯金字塔的修正版，为了还原到原图。通过计算残差图来达到还原。</p>
+<p>拉普拉斯金字塔是通过源图像减去==先缩小后再放大==的图像的一系列图像构成的(缩小放大过程如上)<br>==保留的是残差==  为图像还原做准备<br><img src="https://img-blog.csdn.net/20171003204924313" alt="img"></p>
+<p><img src="https://img-blog.csdn.net/20171003205018841" alt="img">)<img src="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=67fa7d32dc39b60059c307e588395e4f/d000baa1cd11728b3524f2f3c1fcc3cec2fd2cd1.jpg" alt="img"></p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">图像处理</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/21/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86----%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/">展开全文 >></a>
         </p>
       
 
@@ -438,6 +831,8 @@ MathJax.Hub.Queue(function() {
       
     
       
+    
+      
       
       
     
@@ -448,6 +843,8 @@ MathJax.Hub.Queue(function() {
     
       
       <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">所有文章</a></li>
+      
+        
       
         
       
@@ -472,6 +869,14 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">cross-modal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
               </li>
              
@@ -480,11 +885,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">cross modal</a>
+                <a href="javascript:void(0)" class="js-tag color5">图像处理</a>
               </li>
             
             <div class="clearfix"></div>
@@ -535,7 +940,7 @@ MathJax.Hub.Queue(function() {
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">后端开发&lt;br&gt;深度学习&lt;br&gt;前端开发&lt;br&gt;&lt;br&gt;我都不会</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">后端开发&lt;br&gt;深度学习&lt;br&gt;前端开发&lt;br&gt;&lt;br&gt;我都不会&lt;br&gt;&lt;br&gt; email: xinzhiwang1997@gmail.com&lt;br&gt; wechat: GodderWang1997</div>
   	  	
     	</section>
     

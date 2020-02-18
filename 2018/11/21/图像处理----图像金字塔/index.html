@@ -6,15 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>Archives: 2019/4 | Blog of godder</title>
+  <title>图像处理----图像金字塔 | Blog of godder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Blog of godder">
-<meta property="og:url" content="http://blog.godder.top/archives/2019/04/">
+  <meta name="description" content="图像金字塔是一种以多分辨率来解释图像的有效但概念简单的结构。应用于图像分割，机器视觉和图像压缩。一幅图像的金字塔是一系列以金字塔形状排列的分辨率逐步降低，且来源于同一张原始图的图像集合。其通过梯次向下采样获得，直到达到某个终止条件才停止采样。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。我们将一层一层的图像比喻成金字塔，层级越高，则图像越小，分辨率越低。  高斯金字塔 高斯金字塔">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像处理----图像金字塔">
+<meta property="og:url" content="http://blog.godder.top/2018/11/21/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86----%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/">
 <meta property="og:site_name" content="Blog of godder">
+<meta property="og:description" content="图像金字塔是一种以多分辨率来解释图像的有效但概念简单的结构。应用于图像分割，机器视觉和图像压缩。一幅图像的金字塔是一系列以金字塔形状排列的分辨率逐步降低，且来源于同一张原始图的图像集合。其通过梯次向下采样获得，直到达到某个终止条件才停止采样。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。我们将一层一层的图像比喻成金字塔，层级越高，则图像越小，分辨率越低。  高斯金字塔 高斯金字塔">
 <meta property="og:locale" content="zh">
+<meta property="og:image" content="https://img-blog.csdn.net/20160917205739118">
+<meta property="og:image" content="https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=1d66c2a4df88d43fe4a499a01c77b97e/42166d224f4a20a4a746591699529822730ed083.jpg">
+<meta property="og:image" content="https://img-blog.csdn.net/20160917223500317">
+<meta property="og:image" content="https://img-blog.csdn.net/20171003204924313">
+<meta property="og:image" content="https://img-blog.csdn.net/20171003205018841">
+<meta property="og:image" content="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=67fa7d32dc39b60059c307e588395e4f/d000baa1cd11728b3524f2f3c1fcc3cec2fd2cd1.jpg">
+<meta property="article:published_time" content="2018-11-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-18T15:03:05.736Z">
 <meta property="article:author" content="Godder">
+<meta property="article:tag" content="图像处理">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20160917205739118">
   
     <link rel="alternative" href="/atom.xml" title="Blog of godder" type="application/atom+xml">
   
@@ -138,190 +150,184 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-图像处理----图像金字塔" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      图像处理----图像金字塔
+    </h1>
+  
+
+        
+        <a href="/2018/11/21/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86----%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/" class="archive-article-date">
+  	<time datetime="2018-11-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-21</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>图像金字塔是一种以多分辨率来解释图像的有效但概念简单的结构。应用于图像分割，机器视觉和图像压缩。一幅图像的金字塔是一系列以金字塔形状排列的分辨率逐步降低，且来源于同一张原始图的图像集合。其通过梯次向下采样获得，直到达到某个终止条件才停止采样。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。我们将一层一层的图像比喻成金字塔，层级越高，则图像越小，分辨率越低。</p>
+<ol>
+<li><p>高斯金字塔</p>
+<p>高斯金字塔式在Sift算子中提出来的概念，首先高斯金字塔并不是一个金字塔，而是有很多组（Octave）金字塔构成，并且每组金字塔都包含若干层（Interval）<br>高斯金字塔构建过程：</p>
+<pre><code>1. 先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层，高斯卷积函数为：</code></pre><p><img src="https://img-blog.csdn.net/20160917205739118" alt="img"></p>
+<p>​    对于参数σ，在Sift算子中取的是固定值1.6</p>
+<pre><code>2. 将σ乘以一个比例系数k,等到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。
+3. 如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：0，σ，kσ，k^2σ,k^3σ……k^(L-2)σ。
+4. 将第1组倒数第三层图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后再对第2组的图像做如上高斯平滑(高斯卷积) ... 如此得到多组图像</code></pre><p><strong>在同一组内，不同层图像的尺寸是一样的，后一层图像的高斯平滑因子σ是前一层图像平滑因子的k倍；在不同组内，后一组第一个图像是前一组倒数第三个图像的二分之一采样，图像大小是前一组的一半；</strong></p>
+<p>高斯金字塔是通过高斯平滑和亚采样获得一些列下采样图像，也就是说第K层高斯金字塔通过平滑、亚采样就可以获得K+1层高斯图像，高斯金字塔包含了一系列低通滤波器，其截至频率从上一层到下一层是以因子2逐渐增加，所以高斯金字塔可以跨越很大的频率范围。<br><img src="https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=1d66c2a4df88d43fe4a499a01c77b97e/42166d224f4a20a4a746591699529822730ed083.jpg" alt="img"><br>对图像的向下取样(缩小图像, 分辨率提高)<br>为了获取层级为 G_i+1 的金字塔图像，我们采用如下方法:</p>
+<p>​    &lt;1&gt; 对图像G_i进行高斯内核卷积</p>
+<p>​    &lt;2&gt; 将所有偶数行和列去除<br>​    ==结果图像只有原图的四分之一==, 向下取样会逐渐丢失图像的信息</p>
+<p>对图像的向上取样(放大图像, 分辨率降低)<br>​    &lt;1&gt; 将图像在每个方向扩大为原来的两倍，新增的行和列以0填充</p>
+<p>​    &lt;2&gt; 使用先前同样的内核(乘以4)与放大后的图像卷积，获得 “新增像素”的近似值</p>
+</li>
+<li><p>DOG金字塔(差分(Difference of Gaussian)金字塔)<br>DOG金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。概括为DOG金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。<br><img src="https://img-blog.csdn.net/20160917223500317" alt="img"><br>然后对这些DOG图像进行==归一化==，可有很明显的看到差分图像所蕴含的特征，并且有一些特征是在不同模糊程度、不同尺度下都存在的，这些特征正是Sift所要提取的“稳定”特征</p>
+</li>
+<li><p>拉普拉斯金字塔（应用于图像融合）(减少信息丢失)<br>是高斯金字塔的修正版，为了还原到原图。通过计算残差图来达到还原。</p>
+<p>拉普拉斯金字塔是通过源图像减去==先缩小后再放大==的图像的一系列图像构成的(缩小放大过程如上)<br>==保留的是残差==  为图像还原做准备<br><img src="https://img-blog.csdn.net/20171003204924313" alt="img"></p>
+<p><img src="https://img-blog.csdn.net/20171003205018841" alt="img">)<img src="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=67fa7d32dc39b60059c307e588395e4f/d000baa1cd11728b3524f2f3c1fcc3cec2fd2cd1.jpg" alt="img"></p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/19/Cycle-Consistent%20Deep%20Generative%20Hashing%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-18T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/19/Cycle-Consistent%20Deep%20Generative%20Hashing%20for%20Cross-Modal%20Retrieval/">Cycle-Consistent Deep Generative Hashing for Cross-Modal Retrieval</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">图像处理</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2018/11/21/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86----%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-14T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-15</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Triplet-Based Deep Hashing Network for Cross-Modal Retrieval
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/">Self-Supervised Adversarial Hashing Networks for Cross-Modal Retrieval</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    目录没了
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/" class="archive-article-date">
-  	<time datetime="2019-04-10T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-11</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/">Multi-Level Factorisation Net for Person Re-Identification</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">re-id</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-05T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/">Triplet-Based Deep Hashing Network for Cross-Modal Retrieval</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -344,8 +350,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
