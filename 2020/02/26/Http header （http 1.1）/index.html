@@ -6,14 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>Archives: 2019/4 | Blog of godder</title>
+  <title>Http header （http 1.1） | Blog of godder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Blog of godder">
-<meta property="og:url" content="http://blog.godder.top/archives/2019/04/">
+  <meta name="description" content="cache-Control指定请求和响应遵守的缓冲机制。  max-age&#x3D;&lt;seconds&gt;  缓存存储最大周期 no-cache 缓存副本之前，强制把缓存request提交给原server验证 no-store 不使用缓存 no-transform 不可对资源进行转换或转变。Content-*不可由proxy修改  Datehttp报文发送时间，时间表示为世界标准时。 Pragma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Http header （http 1.1）">
+<meta property="og:url" content="http://blog.godder.top/2020/02/26/Http%20header%20%EF%BC%88http%201.1%EF%BC%89/">
 <meta property="og:site_name" content="Blog of godder">
+<meta property="og:description" content="cache-Control指定请求和响应遵守的缓冲机制。  max-age&#x3D;&lt;seconds&gt;  缓存存储最大周期 no-cache 缓存副本之前，强制把缓存request提交给原server验证 no-store 不使用缓存 no-transform 不可对资源进行转换或转变。Content-*不可由proxy修改  Datehttp报文发送时间，时间表示为世界标准时。 Pragma">
 <meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2020-02-26T09:16:54.875Z">
+<meta property="article:modified_time" content="2020-02-26T09:17:46.320Z">
 <meta property="article:author" content="Godder">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Blog of godder" type="application/atom+xml">
@@ -138,190 +144,291 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Http header （http 1.1）" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Http header （http 1.1）
+    </h1>
+  
+
+        
+        <a href="/2020/02/26/Http%20header%20%EF%BC%88http%201.1%EF%BC%89/" class="archive-article-date">
+  	<time datetime="2020-02-26T09:16:54.875Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-26</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="cache-Control"><a href="#cache-Control" class="headerlink" title="cache-Control"></a>cache-Control</h4><p>指定请求和响应遵守的缓冲机制。</p>
+<ul>
+<li>max-age=&lt;seconds&gt;  缓存存储最大周期</li>
+<li>no-cache 缓存副本之前，强制把缓存request提交给原server验证</li>
+<li>no-store 不使用缓存</li>
+<li>no-transform 不可对资源进行转换或转变。Content-*不可由proxy修改</li>
+</ul>
+<h4 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h4><p>http报文发送时间，时间表示为世界标准时。</p>
+<h4 id="Pragma"><a href="#Pragma" class="headerlink" title="Pragma"></a>Pragma</h4><p>用来实现特定指令，常用 Pragma:no-cache</p>
+<h4 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h4><p>当前事务处理完后是否关闭连接。(default: keep-alive)</p>
+<h4 id="Keep-Alive"><a href="#Keep-Alive" class="headerlink" title="Keep-Alive"></a>Keep-Alive</h4><p>允许消息发送者设置超时时长和最大请求数。Connection必须为 keep-alive时生效</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Connection</span>: Keep-Alive</span><br><span class="line"><span class="attribute">Keep-Alive</span>: timeout=5, max=100</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Content-Disposition"><a href="#Content-Disposition" class="headerlink" title="Content-Disposition"></a>Content-Disposition</h4><p>指明回复内容的展示形式(内联inline:页面的一部分，附件attachment:下载并保存本地)</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Dispoisition</span>: attachment; filename="filename.jpg"</span><br></pre></td></tr></table></figure>
+
+<p>或者在request中表单POST请求用到一个值：form-data.</p>
+<h4 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h4><p>在实体头部用于指明资源的MIME类型</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: multipart/form-data; boundary=some</span><br></pre></td></tr></table></figure>
+
+<p>boundary包含1-70个字符，用于封装消息的多个部分边界</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"description"</span> <span class="attr">value</span>=<span class="string">"some text"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"myFile"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span>Submit<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>request header：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/foo</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Content-Length</span>: 68137</span><br><span class="line"><span class="attribute">Content-Type</span>: multipart/form-data; boundary=---------------------------974767299852498929531610575</span><br><span class="line">---------------------------974767299852498929531610575</span><br><span class="line"><span class="attribute">Content-Disposition</span>: form-data; name="description" </span><br><span class="line">---------------------------974767299852498929531610575</span><br><span class="line"><span class="attribute">Content-Disposition</span>: form-data; name="myFile"; filename="foo.txt" </span><br><span class="line"><span class="attribute">Content-Type</span>: text/plain</span><br></pre></td></tr></table></figure>
+
+<h4 id="Content-Encoding"><a href="#Content-Encoding" class="headerlink" title="Content-Encoding"></a>Content-Encoding</h4><p>表明对特定媒体数据进行压缩，与Accept-Encoding对应</p>
+<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>表明发送给接收方消息主体的大小(8位10进制)</p>
+<h4 id="Content-Location"><a href="#Content-Location" class="headerlink" title="Content-Location"></a>Content-Location</h4><p>返回实体数据的地址，提供可访问的资源的直接下载地址，返回实体。</p>
+<h2 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP1.1</span><br><span class="line"><span class="attribute">Host:www.wrox.com</span></span><br><span class="line"><span class="attribute">Accept</span>: /</span><br><span class="line">User-Agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)</span><br><span class="line"><span class="attribute">Content-Type:application/x-www-form-urlencoded</span></span><br><span class="line"><span class="attribute">Content-Length:40</span></span><br><span class="line"><span class="attribute">Connection</span>: Keep-Alive</span><br><span class="line"></span><br><span class="line">name=Professional%20Ajax&amp;publisher=Wiley</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>请求行：表明请求类型及http版本 (post请求) （第一行）</p>
+<p>请求包含：GET, POST, HEAD, PUT, DELETE, TRACK</p>
+</li>
+<li><p>请求头部：表明附加信息 （第二行开始）</p>
+</li>
+<li><p>空行：必有 （倒数第二行）</p>
+</li>
+<li><p>数据主体 （最后一行）</p>
+</li>
+</ul>
+<h4 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h4><ul>
+<li>max-stale=[=&lt;seconds&gt;] client可接收过期时间内的资源</li>
+<li>min-fresh=&lt;seconds&gt;</li>
+<li>only-if-cached client只接受已缓存的response，并不向server发送request检查是否更新</li>
+</ul>
+<h4 id="Host"><a href="#Host" class="headerlink" title="Host"></a>Host</h4><p>指定请求资源的主机和端口号，请求url的原有服务器或网关的位置。</p>
+<h4 id="Accept"><a href="#Accept" class="headerlink" title="Accept"></a>Accept</h4><p>client可接收的类型</p>
+<ul>
+<li><MIME_type>/<MIME_subtype> 单一精确的MIME类型(eg: text/html)</li>
+<li><MIME_type>/* 某一类MIME类型(eg: image/* = {image/png, imagegif, …})</li>
+<li>*/* 任意的MIME类型</li>
+</ul>
+<h4 id="Accept-Charset"><a href="#Accept-Charset" class="headerlink" title="Accept-Charset"></a>Accept-Charset</h4><p>client接收的字符集，如果server不能匹配则返回 406.</p>
+<p>例如 utf-8, iso-8859-1</p>
+<h4 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a>Accept-Encoding</h4><p>client能理解的内容编码方式(一般为压缩算法)，server可以选择不压缩</p>
+<p>参数包含：gzip, compress, deflate, br, identity, *</p>
+<h4 id="User-Agent"><a href="#User-Agent" class="headerlink" title="User-Agent"></a>User-Agent</h4><p>client信息(浏览器、操作系统信息)</p>
+<h4 id="Referer"><a href="#Referer" class="headerlink" title="Referer"></a>Referer</h4><p>包含当前请求页面的来源页面地址，表示当前页面是通过此来源的连接进入的。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Referer</span>: https://www.google.com/search?sxsrf=ALeKk01FVKOWHJ-9-</span><br></pre></td></tr></table></figure>
+
+<p>以下情况不会发送Referer：</p>
+<ul>
+<li>来源页面采用的协议为表示本地文件或者数据的URI</li>
+<li>当前请求页面采用http协议，而来源页面采用https</li>
+</ul>
+<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>请求实体的一个或多个子范围(server可忽略)</p>
+<h4 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h4><p>将先前通过Set-Cookie首部放入client的Cookie的值发送给server</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Cookie</span>: name=value; name2=value2; name3=value3</span><br></pre></td></tr></table></figure>
+
+<h4 id="Authorization"><a href="#Authorization" class="headerlink" title="Authorization"></a>Authorization</h4><p>client的身份凭证，在server返回401或www-authenticate消息头之后后续发送的request包含此消息头</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Authorization</span>: &lt;type&gt; &lt;credentials&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Content-Disposition-1"><a href="#Content-Disposition-1" class="headerlink" title="Content-Disposition"></a>Content-Disposition</h4><p>作为multipart body中的信息头，用于表单的POST请求，且只有name和filename参数可用于http中</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Disposition</span>: form-data; name="fieldName"; filename="file.jpg"</span><br></pre></td></tr></table></figure>
+
+<h4 id="If-Match-If-None-Match"><a href="#If-Match-If-None-Match" class="headerlink" title="If-Match / If-None-Match"></a>If-Match / If-None-Match</h4><p>对于GET和HEAD方法，用来匹配ETag的值，来判断是否更新资源</p>
+<p>对于PUT方法，设值为*，用来保证上传不会覆盖原始资源，防止之前数据丢失。</p>
+<h2 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Date</span>: Fri, 22 May 2009 06:07:21 GMT</span><br><span class="line"><span class="attribute">Content-Type</span>: text/html; charset=UTF-8</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">      &lt;head&gt;&lt;/head&gt;</span><br><span class="line">      &lt;body&gt;</span><br><span class="line">            &lt;!--body goes here--&gt;</span><br><span class="line">      &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>状态行：http version 状态码 状态消息  （第一行）<ul>
+<li>1xx: 信息响应，接收请求后继续处理</li>
+<li>2xx: 处理成功</li>
+<li>3xx: 重定向响应</li>
+<li>4xx: client错误</li>
+<li>5xx: server错误</li>
+</ul>
+</li>
+<li>消息报头：附加信息 (第二行开始)</li>
+<li>空行： 必有 </li>
+<li>响应正文</li>
+</ul>
+<h4 id="Expries"><a href="#Expries" class="headerlink" title="Expries"></a>Expries</h4><p>response过期时间 </p>
+<h4 id="Cache-Control-1"><a href="#Cache-Control-1" class="headerlink" title="Cache-Control"></a>Cache-Control</h4><ul>
+<li>public 表明response可被任何对象(client,proxy, etc.)缓存(共享缓存)</li>
+<li>private 表明response只能被单个用户缓存(proxy不可缓存)(私有缓存)</li>
+<li>must-revalidate 资源过期时，在成功向server验证之前，不能使用该资源响应后续request</li>
+<li>proxy-revalidate 同must-revalidate，但只作用于共享缓存(proxy)</li>
+<li>s-maxage=&lt;seconds&gt; 覆盖max-age或Expries header，作用于共享缓存</li>
+</ul>
+<h4 id="Accept-Patch"><a href="#Accept-Patch" class="headerlink" title="Accept-Patch"></a>Accept-Patch</h4><p>通知client哪些media-type能被server理解，如果request发送的media-type不能解析，则返回415</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Accept-Patch</span>: application/example, text/example;charset=utf-8</span><br></pre></td></tr></table></figure>
+
+<h4 id="Age"><a href="#Age" class="headerlink" title="Age"></a>Age</h4><p>消息对象在缓存代理中贮存时长(秒)</p>
+<h4 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a>ETag</h4><p>资源特定版本标识符。当内容变化时ETag防止资源同时更新时相互覆盖。如果url中的资源更改则一定生成新的ETag值。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ETag</span>: W/"0224"</span><br><span class="line"><span class="attribute">ETag</span>: "33a64df551425fcc55e4d42a148795d9f25f89d4"</span><br></pre></td></tr></table></figure>
+
+<p>W/表示开启弱验证器</p>
+<h4 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h4><p>需要将页面重定向到的地址，配合返回码3xx。其中303保留GET内容，307和308不转发原有方法。</p>
+<h4 id="Set-Cookie"><a href="#Set-Cookie" class="headerlink" title="Set-Cookie"></a>Set-Cookie</h4><p>用于response向client发送cookie</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Set-Cookie</span>: &lt;cookie-name&gt;=&lt;cookie-value&gt;; options</span><br></pre></td></tr></table></figure>
+
+<p>options包含：</p>
+<ul>
+<li>Expries=&lt;date&gt; cookie最长有效时间</li>
+<li>Max-Age=&lt;non-zero-digit&gt; 有效保持时间</li>
+<li>Domain=&lt;domain-value&gt; cookie可送达的主机名，默认为当前访问地址中的主机</li>
+<li>HttpOnly cookie不能使用js由Document.cookie、XMLHttpRequest,Request调用，防止XSS</li>
+<li>Secure 带有安全属性的cookie，只允许在https中设置</li>
+<li>Path=&lt;path-value&gt; 指定一个url路径，该路径必须出现在资源请求路径的中。</li>
+</ul>
+<h4 id="WWW-Authenticate"><a href="#WWW-Authenticate" class="headerlink" title="WWW-Authenticate"></a>WWW-Authenticate</h4><p>指定获取资源对接的验证方式，一般与401一起发送</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">WWW-Authenticate</span>: Basic realm="Access to the staging site"</span><br></pre></td></tr></table></figure>
+
+<p>realm 为一个保护区域的描述，可选。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/19/Cycle-Consistent%20Deep%20Generative%20Hashing%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-18T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/19/Cycle-Consistent%20Deep%20Generative%20Hashing%20for%20Cross-Modal%20Retrieval/">Cycle-Consistent Deep Generative Hashing for Cross-Modal Retrieval</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">web</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2020/02/26/Http%20header%20%EF%BC%88http%201.1%EF%BC%89/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-14T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-15</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/02/18/Message-Queue/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Message Queuing</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/">Self-Supervised Adversarial Hashing Networks for Cross-Modal Retrieval</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#cache-Control"><span class="toc-number">1.</span> <span class="toc-text">cache-Control</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Date"><span class="toc-number">2.</span> <span class="toc-text">Date</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pragma"><span class="toc-number">3.</span> <span class="toc-text">Pragma</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Connection"><span class="toc-number">4.</span> <span class="toc-text">Connection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Keep-Alive"><span class="toc-number">5.</span> <span class="toc-text">Keep-Alive</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Disposition"><span class="toc-number">6.</span> <span class="toc-text">Content-Disposition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Type"><span class="toc-number">7.</span> <span class="toc-text">Content-Type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Encoding"><span class="toc-number">8.</span> <span class="toc-text">Content-Encoding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Length"><span class="toc-number">9.</span> <span class="toc-text">Content-Length</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Location"><span class="toc-number">10.</span> <span class="toc-text">Content-Location</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Request"><span class="toc-number"></span> <span class="toc-text">Request</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cache-Control"><span class="toc-number">1.</span> <span class="toc-text">Cache-Control</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Host"><span class="toc-number">2.</span> <span class="toc-text">Host</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept"><span class="toc-number">3.</span> <span class="toc-text">Accept</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept-Charset"><span class="toc-number">4.</span> <span class="toc-text">Accept-Charset</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept-Encoding"><span class="toc-number">5.</span> <span class="toc-text">Accept-Encoding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#User-Agent"><span class="toc-number">6.</span> <span class="toc-text">User-Agent</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Referer"><span class="toc-number">7.</span> <span class="toc-text">Referer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Range"><span class="toc-number">8.</span> <span class="toc-text">Range</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cookie"><span class="toc-number">9.</span> <span class="toc-text">Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Authorization"><span class="toc-number">10.</span> <span class="toc-text">Authorization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Disposition-1"><span class="toc-number">11.</span> <span class="toc-text">Content-Disposition</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#If-Match-If-None-Match"><span class="toc-number">12.</span> <span class="toc-text">If-Match &#x2F; If-None-Match</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Response"><span class="toc-number"></span> <span class="toc-text">Response</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Expries"><span class="toc-number">1.</span> <span class="toc-text">Expries</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cache-Control-1"><span class="toc-number">2.</span> <span class="toc-text">Cache-Control</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept-Patch"><span class="toc-number">3.</span> <span class="toc-text">Accept-Patch</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Age"><span class="toc-number">4.</span> <span class="toc-text">Age</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ETag"><span class="toc-number">5.</span> <span class="toc-text">ETag</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Location"><span class="toc-number">6.</span> <span class="toc-text">Location</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Set-Cookie"><span class="toc-number">7.</span> <span class="toc-text">Set-Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WWW-Authenticate"><span class="toc-number">8.</span> <span class="toc-text">WWW-Authenticate</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/" class="archive-article-date">
-  	<time datetime="2019-04-10T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-11</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/">Multi-Level Factorisation Net for Person Re-Identification</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">re-id</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-05T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/">Triplet-Based Deep Hashing Network for Cross-Modal Retrieval</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -344,8 +451,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
