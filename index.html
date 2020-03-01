@@ -140,6 +140,161 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java多线程(1)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/01/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B(1)/">Java多线程(1)</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/01/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B(1)/" class="archive-article-date">
+  	<time datetime="2020-03-01T08:56:06.554Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本定义"><a href="#基本定义" class="headerlink" title="基本定义"></a>基本定义</h2><h3 id="程序需要保证的性质"><a href="#程序需要保证的性质" class="headerlink" title="程序需要保证的性质"></a>程序需要保证的性质</h3><h4 id="原子性-atomic"><a href="#原子性-atomic" class="headerlink" title="原子性(atomic)"></a>原子性(atomic)</h4><p>保证多线程下数据的确定性，例如以下操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x = <span class="number">1</span>;		<span class="comment">// atomic write 1 into x</span></span><br><span class="line"><span class="keyword">int</span> y = x;		<span class="comment">// 1.read x; 2.write x into y</span></span><br><span class="line">x++;			<span class="comment">// 1.read x; 2.write x+1 into x</span></span><br><span class="line">x += <span class="number">1</span>; 		<span class="comment">// 1.read x; 2.write x+1 into x</span></span><br></pre></td></tr></table></figure>
+
+<p>除了系统的原子性操作外，还可以通过锁的方式实现操作的原子性。</p>
+<h4 id="可见性-visibility"><a href="#可见性-visibility" class="headerlink" title="可见性(visibility)"></a>可见性(visibility)</h4><p>保证一个值被修改后能立刻被其他线程发现，常用volatile关键字修饰需要保证的变量。</p>
+<h4 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h4><p>JVM在执行class文件时会对指令重排序，但结果不影响单线程执行。在多线程下也需要保持同样的执行顺序。</p>
+<h4 id="Happens-before-ordering"><a href="#Happens-before-ordering" class="headerlink" title="Happens-before ordering"></a>Happens-before ordering</h4><ul>
+<li><p>程序次序法则 如果A一定在B之前发生，则happen before,</p>
+</li>
+<li><p>监视器法则 对一个监视器的解锁一定发生在后续对同一监视器加锁之前</p>
+</li>
+<li><p>Volatie变量法则 写volatile变量一定发生在后续对它的读之前</p>
+</li>
+<li><p>线程启动法则 Thread.start一定发生在线程中的动作之前</p>
+</li>
+<li><p>线程终结法则 线程中的任何动作一定发生在括号中的动作之前（其他线程检测到这个线程已经终止，从Thread.join调用成功返回，Thread.isAlive()返回false）</p>
+</li>
+<li><p>中断法则 一个线程调用另一个线程的interrupt一定发生在另一线程发现中断之前。</p>
+</li>
+<li><p>终结法则 一个对象的构造函数结束一定发生在对象的finalizer之前</p>
+</li>
+<li><p>传递性 A发生在B之前，B发生在C之前，A一定发生在C之前。 </p>
+</li>
+</ul>
+<h3 id="锁-lock"><a href="#锁-lock" class="headerlink" title="锁(lock)"></a>锁(lock)</h3><h4 id="公平锁"><a href="#公平锁" class="headerlink" title="公平锁"></a>公平锁</h4><p>当多个线程争取同一个锁时，非公平的锁并不能保证所有线程都能拿到锁，导致饥饿情况。而公平锁会让所有请求锁的线程都能获取到锁。</p>
+<h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><p>用于保证所修饰的方法或代码块实现操作的原子性。</p>
+<p>例如下面的代码分别通过方法体和代码块的方式实现了原子性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerStatues</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> Set&lt;String&gt; users = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> Set&lt;String&gt; quires = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="comment">// 锁住整个方法内的所有变量，获取当前this对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span>	<span class="keyword">void</span> <span class="title">addUser</span><span class="params">(String user)</span> </span>&#123;</span><br><span class="line">        users.add(user);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// synchronized锁获取quries对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addQuiry</span><span class="params">(String query)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(quires) &#123; </span><br><span class="line">            quires.add(query);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// synchronized锁获取Class&lt;ServerStatues&gt;对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>synchronized本质为<strong>互斥锁</strong>，只允许单个线程进入锁住的代码块或执行锁住的方法。</p>
+<p>同时synchronized也是<strong>内置锁</strong>， 不需要显式获取和释放，与一个对象关联。</p>
+<p><strong>锁的持有者为线程本身</strong>，像下面代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Father</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">aVoid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"father"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Father</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">aVoid</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"son"</span>);</span><br><span class="line">        <span class="keyword">super</span>.aVoid();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在执行Son的aVoid()方法时获取当前Son对象的锁，再调用父类的aVoid()方法，这时线程已经获取了锁。</p>
+<h4 id="显式锁"><a href="#显式锁" class="headerlink" title="显式锁"></a>显式锁</h4><p>显式锁通过实现接口Lock来创建一个锁对象，使用时需要手动上锁和释放。</p>
+<p>相较于synchronized，显式锁更灵活。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> var1, TimeUnit var3)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最常见的实现锁为ReentrantLock，下面的代码中使用ReentrantLock保证操作原子性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReentrantLockTest</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ReentrantLockTest</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.setName(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">            lock.lock(); <span class="comment">// 对后面的变量上锁</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(<span class="keyword">this</span>.getName() + <span class="string">" "</span> + num);</span><br><span class="line">                num++;</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123; <span class="comment">// 防止因异常导致锁没有释放</span></span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLock</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    ReentrantLockTest test1 = <span class="keyword">new</span> ReentrantLockTest(<span class="string">"thread1"</span>);</span><br><span class="line">    ReentrantLockTest test2 = <span class="keyword">new</span> ReentrantLockTest(<span class="string">"thread2"</span>);</span><br><span class="line">    test1.start();</span><br><span class="line">    test2.start();</span><br><span class="line">    test1.join();	<span class="comment">// 等待进程结束</span></span><br><span class="line">    test2.join();</span><br><span class="line">    <span class="keyword">assert</span> ReentrantLockTest.num == <span class="number">200000</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过ReentrantLock部分的源码，ReentrantLock的实现是通过AQS的方式实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReentrantLock</span> <span class="keyword">implements</span> <span class="title">Lock</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">7373984872572414699L</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock.Sync sync;</span><br><span class="line">	<span class="comment">// 默认采用不公平锁</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ReentrantLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sync = <span class="keyword">new</span> ReentrantLock.NonfairSync();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ReentrantLock</span><span class="params">(<span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sync = (ReentrantLock.Sync)(fair ? <span class="keyword">new</span> ReentrantLock.FairSync() : <span class="keyword">new</span> ReentrantLock.NonfairSync());</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">// 上锁时信号量+1</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sync.acquire(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sync.acquireInterruptibly(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.sync.nonfairTryAcquire(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.sync.tryAcquireNanos(<span class="number">1</span>, unit.toNanos(timeout));</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">// 释放锁时信号量值-1，如果多次上锁也要多次释放锁</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sync.release(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Condition <span class="title">newCondition</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.sync.newCondition();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// more</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="volatile关键字"><a href="#volatile关键字" class="headerlink" title="volatile关键字"></a>volatile关键字</h4><ul>
+<li><p>简化实现或者同步策略验证的时候来使用它；</p>
+</li>
+<li><p>确保引用对象的可见性；</p>
+</li>
+<li><p>标示重要的生命周期的事件，例如：开始或者关闭</p>
+</li>
+</ul>
+<p>注意：volatile不保证原子性，和全部的有序性，只能保证volatile前面的指令在volatile前执行，volatile后的指令在其后执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">while</span> (!flag) &#123; <span class="comment">/* do something */</span> &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFlag</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;<span class="keyword">this</span>.flag = flag;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="锁的使用方式"><a href="#锁的使用方式" class="headerlink" title="锁的使用方式"></a>锁的使用方式</h2><p><img src="./runtime_data_area.png" alt=""></p>
+<p>在JVM内存模型中</p>
+<ul>
+<li>方法区：存放每个类的属性变量、代码等信息；</li>
+<li>堆：存放每个类的实例对象</li>
+<li>每个线程内包含：PC，运行栈，本地方法栈</li>
+</ul>
+<p>在线程间共享数据时，只需要考虑JVM层面上的内存模型。</p>
+<h3 id="独占锁"><a href="#独占锁" class="headerlink" title="独占锁"></a>独占锁</h3><p>当上锁的部分只有当前的进程获取到锁，其他的进程无法进入。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerStatues</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> Set&lt;String&gt; users = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> Set&lt;String&gt; quires = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="comment">// 该方法即独占锁，当前线程持有该对象的锁</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span>	<span class="keyword">void</span> <span class="title">addUser</span><span class="params">(String user)</span> </span>&#123;</span><br><span class="line">        users.add(user);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果一个进程在执行addUser方法，则其他进程无法执行addQuery方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">addQuery</span><span class="params">(String query)</span> </span>&#123;</span><br><span class="line">        queries.add(query);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>独占锁会导致锁住过多资源，造成资源浪费。可以实验以下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MonopolyLockTester</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Integer a = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Integer b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> opTimes = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">addA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        opTimes++;</span><br><span class="line">        a++;</span><br><span class="line">        System.out.println(opTimes + <span class="string">" A: "</span> + a);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">addB</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        opTimes++;</span><br><span class="line">        b++;</span><br><span class="line">        System.out.println(opTimes + <span class="string">" B: "</span> + b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMonopolyLock</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        MonopolyLockTester tester = <span class="keyword">new</span> MonopolyLockTester();</span><br><span class="line">        Thread testA = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">                tester.addA();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        Thread testB = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">                tester.addB();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        testA.start();</span><br><span class="line">        testB.start();</span><br><span class="line">        testA.join();</span><br><span class="line">        testB.join();</span><br><span class="line">        <span class="keyword">assert</span> tester.opTimes == <span class="number">200000</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>说明当锁没有释放时，任何线程都无法读取addA()和addB()方法，即使当前线程仅仅只调用了addA()方法，所以opTimes里的结果是200000.</p>
+<h3 id="分拆锁"><a href="#分拆锁" class="headerlink" title="分拆锁"></a>分拆锁</h3><p>由于独立锁的资源占用情况，我们采用分拆锁将锁分拆的更细致。例如最开始的例子，users和queries是两个独立的变量，因此可以采用一个变量一个锁的方式将原有的锁分拆。即</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerStatues</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> Set&lt;String&gt; users = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> Set&lt;String&gt; quires = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="comment">// 在方法内获取users对象的锁</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addUser</span><span class="params">(String user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(users) &#123;users.add(user);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// users对象的锁的所有权不影响queries对象的锁</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">addQuery</span><span class="params">(String query)</span> </span>&#123;</span><br><span class="line">        queries.add(query);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样做个实验，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MonopolyLockTester</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Integer a = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Integer b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> opTimes = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        opTimes++;</span><br><span class="line">        <span class="keyword">synchronized</span> (a) &#123;</span><br><span class="line">            a++;</span><br><span class="line">            System.out.println(opTimes + <span class="string">" A: "</span> + a);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addB</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        opTimes++;</span><br><span class="line">        <span class="keyword">synchronized</span> (b) &#123;</span><br><span class="line">            b++;</span><br><span class="line">            System.out.println(opTimes + <span class="string">" B: "</span> + b);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMonopolyLock</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        MonopolyLockTester tester = <span class="keyword">new</span> MonopolyLockTester();</span><br><span class="line">        Thread testA = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">                tester.addA();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        Thread testB = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">                tester.addB();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        testA.start();</span><br><span class="line">        testB.start();</span><br><span class="line">        testA.join();</span><br><span class="line">        testB.join();</span><br><span class="line">        <span class="keyword">assert</span> tester.opTimes &lt; <span class="number">200000</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>opTimes的值小于200000，说明addA()和addB()在并发进行。</p>
+<h3 id="分离锁"><a href="#分离锁" class="headerlink" title="分离锁"></a>分离锁</h3><p>对于两个独立的变量，我们可以采用每个变量一个锁，但对于一个大的变量进行修改，我们也可以按照分段的方式，对一个对象的不同区域上锁。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StrippingLockTester</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Object[] locks;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> N_LOCKS = <span class="number">4</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String[] contents;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> captiable = <span class="number">40000</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">StrippingLockTester</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		contents = <span class="keyword">new</span> String[captiable];</span><br><span class="line">		locks = <span class="keyword">new</span> Object[N_LOCKS];</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N_LOCKS; i++) &#123; locks[i] = <span class="keyword">new</span> Object();&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> index, String content)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">synchronized</span>(locks[index % N_LOCKS]) &#123;</span><br><span class="line">			contents[index] = content;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>相对于独立锁，分离锁需要更高的开销。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/01/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B(1)/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-HashMap In Java" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1167,27 +1322,7 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">cross-modal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">web</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1196,6 +1331,26 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">messaging</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">cross-modal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">web</a>
               </li>
              
               <li class="article-tag-list-item">
