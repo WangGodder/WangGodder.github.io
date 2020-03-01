@@ -15,13 +15,13 @@
 <meta property="og:site_name" content="Blog of godder">
 <meta property="og:description" content="基本定义程序需要保证的性质原子性(atomic)保证多线程下数据的确定性，例如以下操作">
 <meta property="og:locale" content="zh">
-<meta property="og:image" content="http://blog.godder.top/2020/03/01/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B(1)/runtime_data_area.png">
+<meta property="og:image" content="http://blog.godder.top/img/javaConcurrent/runtime_data_area.png">
 <meta property="article:published_time" content="2020-03-01T08:56:06.554Z">
-<meta property="article:modified_time" content="2020-03-01T09:13:28.027Z">
+<meta property="article:modified_time" content="2020-03-01T16:29:42.959Z">
 <meta property="article:author" content="Godder">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://blog.godder.top/2020/03/01/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B(1)/runtime_data_area.png">
+<meta name="twitter:image" content="http://blog.godder.top/img/javaConcurrent/runtime_data_area.png">
   
     <link rel="alternative" href="/atom.xml" title="Blog of godder" type="application/atom+xml">
   
@@ -223,7 +223,7 @@
 <p>注意：volatile不保证原子性，和全部的有序性，只能保证volatile前面的指令在volatile前执行，volatile后的指令在其后执行。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">while</span> (!flag) &#123; <span class="comment">/* do something */</span> &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFlag</span><span class="params">(<span class="keyword">boolean</span> flag)</span> </span>&#123;<span class="keyword">this</span>.flag = flag;&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="锁的使用方式"><a href="#锁的使用方式" class="headerlink" title="锁的使用方式"></a>锁的使用方式</h2><p><img src="./runtime_data_area.png" alt=""></p>
+<h2 id="锁的使用方式"><a href="#锁的使用方式" class="headerlink" title="锁的使用方式"></a>锁的使用方式</h2><p><img src="/img/javaConcurrent/runtime_data_area.png" alt=""></p>
 <p>在JVM内存模型中</p>
 <ul>
 <li>方法区：存放每个类的属性变量、代码等信息；</li>
@@ -331,6 +331,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2020/03/02/Deep%20Cross-Modal%20Hashing%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Deep Cross-Modal Hashing总结
+        
+      </div>
+    </a>
   
   
     <a href="/2020/02/27/HashMap%20In%20Java/" id="article-nav-older" class="article-nav-link-wrap">
@@ -490,23 +499,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">cross-modal hashing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">pytorch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">cross-modal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">web</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -515,6 +520,18 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">messaging</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">web</a>
               </li>
              
               <li class="article-tag-list-item">
