@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://blog.godder.top">
   <title>Triplet-Based Deep Hashing Network for Cross-Modal Retrieval | Blog of godder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="from IEEE 2018abstract本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。 network and loss1.network architec">
+  <meta name="description" content="from IEEE 2018abstract本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Triplet-Based Deep Hashing Network for Cross-Modal Retrieval">
 <meta property="og:url" content="http://blog.godder.top/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/">
 <meta property="og:site_name" content="Blog of godder">
-<meta property="og:description" content="from IEEE 2018abstract本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。 network and loss1.network architec">
+<meta property="og:description" content="from IEEE 2018abstract本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。">
 <meta property="og:locale" content="zh">
 <meta property="article:published_time" content="2019-04-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-02-18T15:01:32.596Z">
+<meta property="article:modified_time" content="2020-03-01T09:19:41.181Z">
 <meta property="article:author" content="Godder">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="cross-modal">
@@ -165,6 +165,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="from-IEEE-2018"><a href="#from-IEEE-2018" class="headerlink" title="from IEEE 2018"></a>from IEEE 2018</h3><h5 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h5><p>本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。<br>本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。</p>
+<a id="more"></a>
 <h5 id="network-and-loss"><a href="#network-and-loss" class="headerlink" title="network and loss"></a>network and loss</h5><h6 id="1-network-architecture"><a href="#1-network-architecture" class="headerlink" title="1.network architecture"></a>1.network architecture</h6><p>对于图像的hash提取网络，本文采用了CNN-F，仅对最后一层修改为hash code的提取层，网络结构如下<br>![CNN-F](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 1.jpg)<br>上图中 “LRN” 表示是否使用了 Local Response Normalization 即是否使用正则化处理输出结果，pool为MaxPooling</p>
 <p>对于文本的特征提取，则采用了非常简单的多层感知机模型，同样输出层由hash code提取层替换<br>![MLP](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 2.jpg)</p>
 <h6 id="2-loss"><a href="#2-loss" class="headerlink" title="2.loss"></a>2.loss</h6><p>每次进行实例选取时，会选取3个对象：positive, negative, query，其中query于positive相对于negative更加接近。这样就有了在Face net中于triplet loss相似的本文triplet label likelihood公式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 3.jpg)<br>其中F表示图像提取出的hash code，G表示文本提取出的hash code.<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 4.jpg)<br>这里α为需要调试的hyper-parameter.</p>
@@ -441,14 +442,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">messaging</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
               </li>
              
@@ -457,15 +450,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">web</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">messaging</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
               </li>
              
               <li class="article-tag-list-item">

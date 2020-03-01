@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://blog.godder.top">
   <title>Multi-Level Factorisation Net for Person Re-Identification | Blog of godder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="from CVPR 2018abstract本文利用了多层结构提取不同在不同卷积深度下的表现最优的特征，然后对特征进行整合用来实现对行人的Re-ID。在Re-ID和物体检测上都表现出了很好的效果，尤其在Re:ID上达到了sota introduction对于Re-ID问题，难点在于同一人的姿态、外观等细小特征表现不同，同时对于输入的数据中还包含了摄像头的角度不同等因素，导致Re-ID成为难题。对于">
+  <meta name="description" content="from CVPR 2018abstract本文利用了多层结构提取不同在不同卷积深度下的表现最优的特征，然后对特征进行整合用来实现对行人的Re-ID。在Re-ID和物体检测上都表现出了很好的效果，尤其在Re:ID上达到了sota">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Multi-Level Factorisation Net for Person Re-Identification">
 <meta property="og:url" content="http://blog.godder.top/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/">
 <meta property="og:site_name" content="Blog of godder">
-<meta property="og:description" content="from CVPR 2018abstract本文利用了多层结构提取不同在不同卷积深度下的表现最优的特征，然后对特征进行整合用来实现对行人的Re-ID。在Re-ID和物体检测上都表现出了很好的效果，尤其在Re:ID上达到了sota introduction对于Re-ID问题，难点在于同一人的姿态、外观等细小特征表现不同，同时对于输入的数据中还包含了摄像头的角度不同等因素，导致Re-ID成为难题。对于">
+<meta property="og:description" content="from CVPR 2018abstract本文利用了多层结构提取不同在不同卷积深度下的表现最优的特征，然后对特征进行整合用来实现对行人的Re-ID。在Re-ID和物体检测上都表现出了很好的效果，尤其在Re:ID上达到了sota">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="http://blog.godder.top/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation1.jpg">
 <meta property="og:image" content="http://blog.godder.top/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation2.jpg">
@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://blog.godder.top/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation4.jpg">
 <meta property="og:image" content="http://blog.godder.top/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation5.jpg">
 <meta property="article:published_time" content="2019-04-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-02-18T14:48:40.063Z">
+<meta property="article:modified_time" content="2020-03-01T09:16:42.042Z">
 <meta property="article:author" content="Godder">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="re-id">
@@ -171,6 +171,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h4 id="from-CVPR-2018"><a href="#from-CVPR-2018" class="headerlink" title="from CVPR 2018"></a>from CVPR 2018</h4><h5 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h5><p>本文利用了多层结构提取不同在不同卷积深度下的表现最优的特征，然后对特征进行整合用来实现对行人的Re-ID。在Re-ID和物体检测上都表现出了很好的效果，尤其在Re:ID上达到了sota</p>
+<a id="more"></a>
 <h5 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h5><p>对于Re-ID问题，难点在于同一人的姿态、外观等细小特征表现不同，同时对于输入的数据中还包含了摄像头的角度不同等因素，导致Re-ID成为难题。<br>对于每一个人，可以通过图像进行一些信息的提取，例如下图:<br><img src="/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation1.jpg" alt=""><br>其中很多方法是通过对于这可见的语义进行深层的特征提取，然后通过这些通过高层次的语义进行识别，但这样存在高成本和高错误的问题。<br>另外的方法是通过注意力机制对特征进行融合，但这样的做法很盲目，无法获取每层能够获取的最有效的因素特征。(例如:浅层的特征一般用于提取衣服颜色，高层的特征用于提取性别)<br>本文中采用了多级别因素提取网络，网络结构如下：<br><img src="/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation2.jpg" alt=""><br>利用该网络将得到不同层次中可以用来分类的因素，和与分类无关的因素。</p>
 <h5 id="network-architecture-and-optimisation"><a href="#network-architecture-and-optimisation" class="headerlink" title="network architecture and optimisation"></a>network architecture and optimisation</h5><h6 id="network-architecture"><a href="#network-architecture" class="headerlink" title="network architecture"></a>network architecture</h6><p>MLFN(Multi-Level Factorisation Net)网络由多个block构成，每个block(B)表示一个语义级别；每个block中包含了多个Factor Module(FM)用来提取每个因素的特征，每个FM中包含了独立多个卷积层与pooling层。Factor Selection Module(FSM)因素选择模型，用来选取该block中生效的因素，对于不生效的因素，网络进行冻结处理。网络结构与ResNeXt相似，但不同的是FM之间没有共享权重。<br><img src="/img/Multi-Level-FN/Multi-Level-Factorisation-Net-for-Person-Re-Identi%EF%AC%81cation3.jpg" alt=""></p>
 <h6 id="1-FM"><a href="#1-FM" class="headerlink" title="1.FM"></a>1.FM</h6><p>对于每个block中，包含了K<del>n</del>个FM模型，每个block中的FM的个数不同，对于每个FM的输出如下<br>$$<br>M_{n,i}\in\R^{H_n×W_n×C_n} <del>~</del> M_{n,i}是具有H_n*W_n大小C_n通道的特征<br>$$</p>
@@ -442,14 +443,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">messaging</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
               </li>
              
@@ -458,15 +451,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">web</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">messaging</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
               </li>
              
               <li class="article-tag-list-item">

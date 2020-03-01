@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://blog.godder.top">
   <title>HashMap In Java | Blog of godder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="create123456789101112131415161718192021222324252627282930public HashMap(int initialCapacity, float loadFactor) &amp;#123;    if (initialCapacity &lt; 0) &amp;#123;        throw new IllegalArgumentException(&quot;I">
+  <meta name="description" content="hashMap是java中最常用的Key-Value存储结构，通过将key和value的hash进程存储，并结合红黑树和列表优化存储。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HashMap In Java">
 <meta property="og:url" content="http://blog.godder.top/2020/02/27/HashMap%20In%20Java/">
 <meta property="og:site_name" content="Blog of godder">
-<meta property="og:description" content="create123456789101112131415161718192021222324252627282930public HashMap(int initialCapacity, float loadFactor) &amp;#123;    if (initialCapacity &lt; 0) &amp;#123;        throw new IllegalArgumentException(&quot;I">
+<meta property="og:description" content="hashMap是java中最常用的Key-Value存储结构，通过将key和value的hash进程存储，并结合红黑树和列表优化存储。">
 <meta property="og:locale" content="zh">
 <meta property="article:published_time" content="2020-02-27T14:23:10.460Z">
-<meta property="article:modified_time" content="2020-02-27T14:24:02.097Z">
+<meta property="article:modified_time" content="2020-03-01T09:16:42.034Z">
 <meta property="article:author" content="Godder">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -163,7 +163,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="create"><a href="#create" class="headerlink" title="create"></a>create</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> + initialCapacity);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// map大小限制检测</span></span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; <span class="number">1073741824</span>) &#123;</span><br><span class="line">            initialCapacity = <span class="number">1073741824</span>;</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">// 设置平衡因子</span></span><br><span class="line">        <span class="keyword">if</span> (loadFactor &gt; <span class="number">0.0F</span> &amp;&amp; !Float.isNaN(loadFactor)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">            <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> + loadFactor);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line"> 	<span class="keyword">this</span>(initialCapacity, <span class="number">0.75F</span>);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.loadFactor = <span class="number">0.75F</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(Map&lt;? extends K, ? extends V&gt; m)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.loadFactor = <span class="number">0.75F</span>;</span><br><span class="line">	<span class="keyword">this</span>.putMapEntries(m, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>hashMap是java中最常用的Key-Value存储结构，通过将key和value的hash进程存储，并结合红黑树和列表优化存储。</p>
+<a id="more"></a>
+<h3 id="create"><a href="#create" class="headerlink" title="create"></a>create</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> + initialCapacity);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// map大小限制检测</span></span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; <span class="number">1073741824</span>) &#123;</span><br><span class="line">            initialCapacity = <span class="number">1073741824</span>;</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">// 设置平衡因子</span></span><br><span class="line">        <span class="keyword">if</span> (loadFactor &gt; <span class="number">0.0F</span> &amp;&amp; !Float.isNaN(loadFactor)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">            <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> + loadFactor);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line"> 	<span class="keyword">this</span>(initialCapacity, <span class="number">0.75F</span>);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.loadFactor = <span class="number">0.75F</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(Map&lt;? extends K, ? extends V&gt; m)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.loadFactor = <span class="number">0.75F</span>;</span><br><span class="line">	<span class="keyword">this</span>.putMapEntries(m, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>平衡因子一般默认为0.75，用于预防插入内容超过容量，当map中entity个数超过容量*平衡因子后进行扩容。</p>
 <p>HashMap通过Node节点的方式来对输入的key-value进行结构化存储</p>
@@ -436,14 +438,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">messaging</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
               </li>
              
@@ -452,15 +446,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">web</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">messaging</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
               </li>
              
               <li class="article-tag-list-item">

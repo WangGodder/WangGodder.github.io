@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://blog.godder.top/img/Cycle-Consistent-DGCMH/Cycle-Consistent-Deep-Generative-Hashing-for-Cross-Modal-Retrieval9.jpg">
 <meta property="og:image" content="http://blog.godder.top/img/Cycle-Consistent-DGCMH/Cycle-Consistent-Deep-Generative-Hashing-for-Cross-Modal-Retrieval11.jpg">
 <meta property="article:published_time" content="2019-04-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-02-18T14:48:40.079Z">
+<meta property="article:modified_time" content="2020-03-01T09:19:41.173Z">
 <meta property="article:author" content="Godder">
 <meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="cross-modal">
@@ -178,6 +178,7 @@
       
         <h3 id="from-TIP-2019"><a href="#from-TIP-2019" class="headerlink" title="from TIP 2019"></a>from TIP 2019</h3><h4 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h4><p>由于生成的hash的对于输入的对象会有信息丢失，本文利用cycle-GAN，通过将生成的hash返回生成输入，从而减少在有模态对象生成hash code的过程中信息的丢失。同时利用随机hash生成结合概率模型获得loss函数。</p>
 <h4 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h4><p>由于很多实际因素，成对的训练数据在未来将难以实现，所以本文接用DGH(Deep Generative Hashing)将不同模态对象的提取的特征与hashing进行相互生成，从而减少因feature map到hashing之间的信息损失。同时结合cycle-consistency，将不同模态之间的对象特征进行相互转换，利用GAN的原理，增强分类器对于来自不同模态特征所生成的该模态下特征的分类能力。以图像与文本两个模态为例。<br><img src="/img/Cycle-Consistent-DGCMH/Cycle-Consistent-Deep-Generative-Hashing-for-Cross-Modal-Retrieval1.jpg" alt=""></p>
+<a id="more"></a>
 <p>按照上述图中的描述过程，映射G表示由图像特征生成文本特征，F表示由文本特征生成图像特征。其中映射的过程包含由输入特征到hashing的映射H，以及由H映射出的hashing对输入特征的反映射P，最后再由P反映射出的输入特征来映射生成另外一个模态的特征。具体过程在上图中标出。</p>
 <h4 id="Network-and-training-objective"><a href="#Network-and-training-objective" class="headerlink" title="Network and training objective"></a>Network and training objective</h4><h5 id="network-structure"><a href="#network-structure" class="headerlink" title="network structure"></a>network structure</h5><p>本文涉及到3个过程：</p>
 <ol>
@@ -486,14 +487,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">messaging</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
               </li>
              
@@ -502,15 +495,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">web</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">messaging</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
               </li>
              
               <li class="article-tag-list-item">
