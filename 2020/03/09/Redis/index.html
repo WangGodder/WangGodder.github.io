@@ -8,16 +8,16 @@
   <link rel="dns-prefetch" href="http://blog.godder.top">
   <title>Redis 基础 | Blog of godder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="数据类型String 字符串        size &#x3D; 512MBkey-value形式，二进制安全。(可包含任意数据，包括任何对象的序列化对象) 用于缓存，计数器，分布式锁等 123456789101112131415161718192021222324127.0.0.1:6379&gt; SET message &quot;hello redis&quot;OK127.0.0.1:6379&gt; get me">
+  <meta name="description" content="数据类型String 字符串        size &#x3D; 512MBkey-value形式，二进制安全。(可包含任意数据，包括任何对象的序列化对象) 用于缓存，计数器，分布式锁等">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis 基础">
 <meta property="og:url" content="http://blog.godder.top/2020/03/09/Redis/">
 <meta property="og:site_name" content="Blog of godder">
-<meta property="og:description" content="数据类型String 字符串        size &#x3D; 512MBkey-value形式，二进制安全。(可包含任意数据，包括任何对象的序列化对象) 用于缓存，计数器，分布式锁等 123456789101112131415161718192021222324127.0.0.1:6379&gt; SET message &quot;hello redis&quot;OK127.0.0.1:6379&gt; get me">
+<meta property="og:description" content="数据类型String 字符串        size &#x3D; 512MBkey-value形式，二进制安全。(可包含任意数据，包括任何对象的序列化对象) 用于缓存，计数器，分布式锁等">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="http://blog.godder.top/img/redis/multi-level-list.png">
 <meta property="article:published_time" content="2020-03-09T15:31:52.914Z">
-<meta property="article:modified_time" content="2020-03-09T15:34:54.194Z">
+<meta property="article:modified_time" content="2020-03-09T15:57:57.603Z">
 <meta property="article:author" content="Godder">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
@@ -167,6 +167,8 @@
       
         <h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h5 id="String-字符串-size-512MB"><a href="#String-字符串-size-512MB" class="headerlink" title="String 字符串        size = 512MB"></a>String 字符串        size = 512MB</h5><p>key-value形式，二进制安全。(可包含任意数据，包括任何对象的序列化对象)</p>
 <p>用于缓存，计数器，分布式锁等</p>
+<a id="more"></a>
+
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SET message <span class="string">"hello redis"</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get message</span><br><span class="line"><span class="string">"hello redis"</span></span><br><span class="line">127.0.0.1:6379&gt; getrange message 1 3	// 获取字符串1至3的字符</span><br><span class="line"><span class="string">"ell"</span></span><br><span class="line">127.0.0.1:6379&gt; getset message <span class="string">"hello world"</span></span><br><span class="line"><span class="string">"hello redis"</span></span><br><span class="line">127.0.0.1:6379&gt; get message</span><br><span class="line"><span class="string">"hello world"</span></span><br><span class="line">127.0.0.1:6379&gt; setex mes 10 <span class="string">"10s"</span>	 // 设置key-value时同时设置存活时间10s</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get mes</span><br><span class="line"><span class="string">"10s"</span></span><br><span class="line">127.0.0.1:6379&gt; get mes</span><br><span class="line">(nil)</span><br><span class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> number 10		// 设置value为数值</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; incr number			// 数值+1</span><br><span class="line">(<span class="built_in">integer</span>) 11</span><br><span class="line">127.0.0.1:6379&gt; append number <span class="string">"a"</span>	// 在字符串后追加文本并返回长度</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; get number</span><br><span class="line"><span class="string">"11a"</span></span><br></pre></td></tr></table></figure>
 
 <h5 id="Hash-字典-每个hash可存储-2-32-1-个key-value"><a href="#Hash-字典-每个hash可存储-2-32-1-个key-value" class="headerlink" title="Hash 字典        每个hash可存储$2^{32}-1$个key-value"></a>Hash 字典        每个hash可存储$2^{32}-1$个key-value</h5><p>String类型的key-value映射表，用户存储、读取、修改用户属性</p>
@@ -633,14 +635,6 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">cross-modal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">cross-modal hashing</a>
               </li>
              
@@ -649,15 +643,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">web</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+                <a href="javascript:void(0)" class="js-tag color2">cross-modal</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -669,11 +655,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">web</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
