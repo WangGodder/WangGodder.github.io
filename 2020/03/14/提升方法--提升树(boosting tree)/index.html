@@ -16,7 +16,7 @@
 <meta property="og:description" content="提升树(BT)">
 <meta property="og:locale" content="zh">
 <meta property="article:published_time" content="2020-03-13T17:36:20.490Z">
-<meta property="article:modified_time" content="2020-03-13T17:37:44.657Z">
+<meta property="article:modified_time" content="2020-03-17T08:35:38.550Z">
 <meta property="article:author" content="Godder">
 <meta property="article:tag" content="机器学习">
 <meta name="twitter:card" content="summary">
@@ -165,7 +165,7 @@
       
         <h2 id="提升树-BT"><a href="#提升树-BT" class="headerlink" title="提升树(BT)"></a>提升树(BT)</h2><a id="more"></a>
 <p>对于分类问题，提升树的决策树是二叉决策树；对于回归问题，提升树的决策树是二叉回归树。</p>
-<p>提升树的模型为基础的加法模型$f(\vec{x}) = f_M(\vec{x})=\sum_{m=1}^Mh_m(\vec{x};\theta_m)$, 其中$h_m(\vec{x};\theta_m)$表示第m个决策树，$\theta_m$表示第m个决策树的参数。</p>
+<p>提升树的模型为基础的加法模型$$f(\vec{x}) = f_M(\vec{x})=\sum_{m=1}^Mh_m(\vec{x};\theta_m)$$, 其中$h_m(\vec{x};\theta_m)$表示第m个决策树，$\theta_m$表示第m个决策树的参数。</p>
 <p>提升树采用前向分步算法：</p>
 <ol>
 <li>确定初始提升树 $f_0(\vec{x}) = 0$</li>
@@ -186,7 +186,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error:0.0255, bias:0.0003, noise:0.0098</span><br></pre></td></tr></table></figure>
 
 <h2 id="梯度提升树-GBT"><a href="#梯度提升树-GBT" class="headerlink" title="梯度提升树(GBT)"></a>梯度提升树(GBT)</h2><p>在BT的基础上，GBT提供了<strong>损失函数为一般函数</strong>的解决方法</p>
-<p>利用一阶泰勒展开式，将损失函数进行替换$f(x+\Delta x) = f(x) + f’(x)\Delta x$, 由此等到新的损失函数:<br>$$<br>L(\hat{y}, f_n(\vec{x}))=L(\hat{y}, f_{n-1}(\vec{x}) + h_n(\vec{x}, \theta_n)) = L(\hat{y}, f_{n-1}(\vec{x}) + \frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\part f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n))\<br>\Delta L = L(\hat{y}, f_n(\vec{x})) - L(\hat{y}, f_{n-1}(\vec{x})) = \frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\part f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n)\<br>h_n(\vec{x}, \theta_n) = -\frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\part f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n)<br>$$<br>对于MSE函数，上述就是残差；对于其他函数，上述就是残差近似值.</p>
+<p>利用一阶泰勒展开式，将损失函数进行替换$f(x+\Delta x) = f(x) + f’(x)\Delta x$, 由此等到新的损失函数:<br>$$<br>L(\hat{y}, f_n(\vec{x}))=L(\hat{y}, f_{n-1}(\vec{x}) + h_n(\vec{x}, \theta_n)) = L(\hat{y}, f_{n-1}(\vec{x}) + \frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\part f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n))\<br>\Delta L = L(\hat{y}, f_n(\vec{x})) - L(\hat{y}, f_{n-1}(\vec{x})) = \frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\partial f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n)\<br>h_n(\vec{x}, \theta_n) = -\frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\partial f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n)<br>$$<br>对于MSE函数，上述就是残差；对于其他函数，上述就是残差近似值.</p>
 <p>当前模型需要根据上一个模型的梯度方向进行优化。</p>
 <h3 id="梯度提升决策树-GBDT"><a href="#梯度提升决策树-GBDT" class="headerlink" title="梯度提升决策树(GBDT)"></a>梯度提升决策树(GBDT)</h3><p>对于分类模型，GBT采用决策树作为基本模型</p>
 <ul>
@@ -195,7 +195,7 @@
 <ol>
 <li>初始化 $f_0(\vec{x})=arg min_\theta\sum_{i=1}^NL(\hat{y},\theta)$</li>
 <li>第n步<ol>
-<li>$r_{in} = \frac{\part(\hat{y},f(x_i))}{\part f(x_i)}$, 回归树以$r_{in}$作为目标，得到第n个树的节点区域$R_{n,j} j=1,2\dots J$</li>
+<li>$r_{in} = \frac{\partial(\hat{y},f(x_i))}{\partial f(x_i)}$, 回归树以$r_{in}$作为目标，得到第n个树的节点区域$R_{n,j} j=1,2\dots J$</li>
 <li>对$j=1,2,\dots,J$每个区域计算输出：$\gamma_{n,j}=\arg\min_\gamma\sum_{\vec{x}\in R_{m,j}}L(\hat{y}, f_{m-1}(\vec{x})+\gamma)$</li>
 <li>更新$f_n(x)=f_{n-1}(\vec{x})+\sum_{j=1}^{J_n}\gamma_{jm}I$ ($\vec{x}\in R_{n,j}$)</li>
 </ol>
@@ -489,6 +489,14 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
               </li>
              
@@ -505,15 +513,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
+                <a href="javascript:void(0)" class="js-tag color1">web安全</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -522,10 +530,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
             
             <div class="clearfix"></div>

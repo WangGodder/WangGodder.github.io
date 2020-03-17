@@ -6,23 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>Message Queuing | 朽木自雕</title>
+  <title>后端Web安全 | 朽木自雕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="AMQP(advance message queuing protocol)面向消息中间件的应用层协议，关注于消息以字节流传递的方式，保证消息的排序和路由的可靠性和安全性。并不保证API的一致性。具体见https:&#x2F;&#x2F;www.amqp.org&#x2F;">
+  <meta name="description" content="CSRF(跨域请求伪造)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Message Queuing">
-<meta property="og:url" content="http://blog.godder.top/2020/02/18/Message-Queue/">
+<meta property="og:title" content="后端Web安全">
+<meta property="og:url" content="http://blog.godder.top/2020/03/17/%E5%90%8E%E7%AB%AFWeb%E5%AE%89%E5%85%A8/">
 <meta property="og:site_name" content="朽木自雕">
-<meta property="og:description" content="AMQP(advance message queuing protocol)面向消息中间件的应用层协议，关注于消息以字节流传递的方式，保证消息的排序和路由的可靠性和安全性。并不保证API的一致性。具体见https:&#x2F;&#x2F;www.amqp.org&#x2F;">
+<meta property="og:description" content="CSRF(跨域请求伪造)">
 <meta property="og:locale" content="zh">
-<meta property="og:image" content="http://blog.godder.top/img/Message-Queue/AMQ%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81.png">
-<meta property="article:published_time" content="2020-02-18T10:50:19.019Z">
-<meta property="article:modified_time" content="2020-03-01T09:16:42.022Z">
+<meta property="article:published_time" content="2020-03-17T08:32:25.358Z">
+<meta property="article:modified_time" content="2020-03-17T08:33:17.490Z">
 <meta property="article:author" content="Godder">
-<meta property="article:tag" content="spring cloud">
-<meta property="article:tag" content="messaging">
+<meta property="article:tag" content="web安全">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://blog.godder.top/img/Message-Queue/AMQ%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81.png">
   
     <link rel="alternative" href="/atom.xml" title="朽木自雕" type="application/atom+xml">
   
@@ -146,49 +143,98 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Message-Queue" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-后端Web安全" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Message Queuing
+      后端Web安全
     </h1>
   
 
         
-        <a href="/2020/02/18/Message-Queue/" class="archive-article-date">
-  	<time datetime="2020-02-18T10:50:19.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-18</time>
+        <a href="/2020/03/17/%E5%90%8E%E7%AB%AFWeb%E5%AE%89%E5%85%A8/" class="archive-article-date">
+  	<time datetime="2020-03-17T08:32:25.358Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="AMQP-advance-message-queuing-protocol"><a href="#AMQP-advance-message-queuing-protocol" class="headerlink" title="AMQP(advance message queuing protocol)"></a>AMQP(advance message queuing protocol)</h3><p>面向消息中间件的<strong>应用层</strong>协议，关注于消息以字节流传递的方式，保证消息的排序和路由的可靠性和安全性。并不保证API的一致性。具体见<a href="https://www.amqp.org/" target="_blank" rel="noopener">https://www.amqp.org/</a></p>
-<a id="more"></a>
-<h4 id="Advance-Message-Queuing-Model"><a href="#Advance-Message-Queuing-Model" class="headerlink" title="Advance Message Queuing Model"></a>Advance Message Queuing Model</h4><p>AMQ把消费者和生产者隔离，使得任何一方出现问题时不影响另一方的正常信息获取和发送。</p>
+        <h2 id="CSRF-跨域请求伪造"><a href="#CSRF-跨域请求伪造" class="headerlink" title="CSRF(跨域请求伪造)"></a>CSRF(跨域请求伪造)</h2><a id="more"></a>
+<p>跨域请求攻击(Cross SiteRequest Forgery) : 利用当前页面获取的用户信息去伪造其他该用户的其他请求。</p>
+<h4 id="攻击过程："><a href="#攻击过程：" class="headerlink" title="攻击过程："></a>攻击过程：</h4><ol>
+<li>登录信任网站A，其中A有csrf漏洞，并在本地存储<strong>cookie</strong></li>
+<li>在不注销A的情况下，访问网站B</li>
+<li>浏览器加载B的html中包含了基于当前用户的请求，网站B伪造A的信息</li>
+</ol>
+<h4 id="攻击实例"><a href="#攻击实例" class="headerlink" title="攻击实例"></a>攻击实例</h4><blockquote>
+<p>通过Get方式</p>
+</blockquote>
+<p>假如我们现在登录了系统A，并且系统在本地Cookie存入了jwt，这时我们打开攻击网站B，B中有这样一行代码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">http://www.test.godder/transform?targetAccount</span>=<span class="string">123&amp;money</span>=<span class="string">999</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这时，网站B就会通过这个img加载仿照A网站用户的身份去执行操作</p>
+<blockquote>
+<p>通过Post方式</p>
+</blockquote>
+<p>如果这时登录系统A，并且在本地Cookie保存了信息，这时攻击网站B中有如下代码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"http://www.test.godder/transform"</span> <span class="attr">method</span>=<span class="string">"POST"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"account"</span> <span class="attr">value</span>=<span class="string">"123"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"money"</span> <span class="attr">value</span>=<span class="string">"9999"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">        	<span class="built_in">document</span>.forms[<span class="number">0</span>].submit();</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这时登录网站B，网站B就会通过系统A保存的cookie信息伪造用户通过POST方法去操作</p>
+<h4 id="防范"><a href="#防范" class="headerlink" title="防范"></a>防范</h4><blockquote>
 <ol>
-<li><h6 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h6><p>消息队列(queue)将生存者(producer)发出的消息存储在内存或外存中，并按照一定顺序转发给一个或多个消费者(consumer)，每个队列是独立隔离的。</p>
-</li>
-<li><h6 id="Exchange"><a href="#Exchange" class="headerlink" title="Exchange"></a>Exchange</h6><p>交换机用于接收生产者发出的消息，然后基于路由(routing)和队列(queue)绑定关系(binding)进行匹配，投递给对应的交换机(exchange)或队列分发。<strong>交换机不存储信息，只进行分发</strong>。</p>
-</li>
+<li>验证HTTP Referer字段</li>
 </ol>
-<h4 id="Message-flowing"><a href="#Message-flowing" class="headerlink" title="Message flowing"></a>Message flowing</h4><p><img src="/img/Message-Queue/AMQ%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81.png" alt=""></p>
+</blockquote>
+<p>Http Referer字段包含了Http请求的来源地址，如果http是从攻击网站B发出，则Http Referer 字段的地址不满足要求。</p>
+<p><strong>可以通过浏览器漏洞修改Http Refere字段。</strong></p>
+<blockquote>
+<ol start="2">
+<li>csrf token</li>
+</ol>
+</blockquote>
+<p>CSRF token是一个由服务器端生成的<strong>不重复的</strong>，<strong>加密的</strong>，<strong>不可预测的</strong>的值，存放在server端session中，client在收到token后尽快放入html中，<strong>不存放在cookie</strong>。每次request中包含这个token，每次上传server对request中包含的token进行验证。</p>
 <ul>
-<li>producer创建消息同时设置消息属性并标记路由信息；</li>
-<li>当消息传递到exchange时，由exchange判断能否转发，如果不能则丢弃消息并反传回producer;</li>
-<li>一个exchange可以转发到多个queue，由此转发的queue内容相同，但操作隔离;</li>
-<li>当message到达queue时，根据AMQP投递给consumer,若没有consumer则将message存入内存或外存；</li>
-<li>当message传递给consumer时，将message从缓冲区(内存或外存)删除。</li>
+<li>通过表单上传</li>
 </ul>
-<h4 id="MQ使用场景"><a href="#MQ使用场景" class="headerlink" title="MQ使用场景"></a>MQ使用场景</h4><ol>
-<li>解耦：producer和consumer任何一方出现问题时都不影响另外一方</li>
-<li>异步处理：当服务的其中几步可以异步操作时，可以通过MQ通知两个步骤同时操作</li>
-<li>秒杀活动：将用户的购买信息写入消息队列，如果队列满则丢弃数据，然后由秒杀业务进行信息读取并处理</li>
-<li>日志处理：对于大量日志传输问题，主要应用kafka进行。</li>
-</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"csrf-token"</span> <span class="attr">value</span>=<span class="string">"CIwNZNlR4XbisJF39I8yWnWX9wX4WFoz"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过http header中meta上传</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"X-CSRF-TOKEN"</span> <span class="attr">content</span>=<span class="string">"CIwNZNlR4XbisJF39I8yWnWX9wX4WFoz"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>CSRF token生成</p>
+</blockquote>
+<p>在server使用强伪随机数生成器(PRNG)，附带创建时间戳和静态密码。</p>
+<h2 id="XSS-跨站脚本攻击"><a href="#XSS-跨站脚本攻击" class="headerlink" title="XSS(跨站脚本攻击)"></a>XSS(跨站脚本攻击)</h2><p>XSS(cross Site Scripting)是在Web中插入script代码，当浏览web页面时运行插入的script代码</p>
+<h3 id="反射型XSS"><a href="#反射型XSS" class="headerlink" title="反射型XSS"></a>反射型XSS</h3><p>通过把脚本反射给server，server再把没有处理的脚本返回，非持久性。</p>
+<h4 id="攻击实例-1"><a href="#攻击实例-1" class="headerlink" title="攻击实例"></a>攻击实例</h4><blockquote>
+<p>通过插入信息</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.test.godder?name=&lt;script&gt;alert("xss")&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>通过资源路径插入</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"can not visit"</span> <span class="attr">onerror</span>=<span class="string">"alert('xss attacked')"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>通过非script标签插入</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">onmouseover</span>=<span class="string">"alert('xss attecked')"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- something --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h3><p>针对某一个url的web页面进行持久性改变，每个访问的用户都会受到影响</p>
+<h4 id="攻击实例-2"><a href="#攻击实例-2" class="headerlink" title="攻击实例"></a>攻击实例</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"readFromServer"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="actionscript">alert(<span class="string">"xss attacked"</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="防范-1"><a href="#防范-1" class="headerlink" title="防范"></a>防范</h3><ul>
+<li>过滤关键字，并采用转义字符代替</li>
+<li>限制输入长度</li>
+</ul>
 
       
 
@@ -202,11 +248,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">spring cloud</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">messaging</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">web安全</a>
         		</li>
       		
 		</ul>
@@ -262,7 +304,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2020/02/18/Message-Queue/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2020/03/17/%E5%90%8E%E7%AB%AFWeb%E5%AE%89%E5%85%A8/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -276,18 +318,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/02/26/Http%20header%20%EF%BC%88http%201.1%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Http header （http 1.1）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/19/Cycle-Consistent%20Deep%20Generative%20Hashing%20for%20Cross-Modal%20Retrieval/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Cycle-Consistent Deep Generative Hashing for Cross-Modal Retrieval</div>
+    <a href="/2020/03/14/Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Redis分布式锁</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -314,7 +347,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#AMQP-advance-message-queuing-protocol"><span class="toc-number">1.</span> <span class="toc-text">AMQP(advance message queuing protocol)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Advance-Message-Queuing-Model"><span class="toc-number">1.1.</span> <span class="toc-text">Advance Message Queuing Model</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Message-Queue"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">Message Queue</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Exchange"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">Exchange</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Message-flowing"><span class="toc-number">1.2.</span> <span class="toc-text">Message flowing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MQ使用场景"><span class="toc-number">1.3.</span> <span class="toc-text">MQ使用场景</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF-跨域请求伪造"><span class="toc-number">1.</span> <span class="toc-text">CSRF(跨域请求伪造)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击过程："><span class="toc-number">1.0.1.</span> <span class="toc-text">攻击过程：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击实例"><span class="toc-number">1.0.2.</span> <span class="toc-text">攻击实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#防范"><span class="toc-number">1.0.3.</span> <span class="toc-text">防范</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS-跨站脚本攻击"><span class="toc-number">2.</span> <span class="toc-text">XSS(跨站脚本攻击)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#反射型XSS"><span class="toc-number">2.1.</span> <span class="toc-text">反射型XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击实例-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">攻击实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储型XSS"><span class="toc-number">2.2.</span> <span class="toc-text">存储型XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击实例-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">攻击实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#防范-1"><span class="toc-number">2.3.</span> <span class="toc-text">防范</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
