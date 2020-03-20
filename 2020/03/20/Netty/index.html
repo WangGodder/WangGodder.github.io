@@ -6,16 +6,41 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>Tag: re-id | 朽木自雕</title>
+  <title>Netty | 朽木自雕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="朽木自雕">
-<meta property="og:url" content="http://blog.godder.top/tags/re-id/">
+  <meta name="description" content="IO1. Blocking IO同步堵塞IO模型，即在操作时会发生堵塞持有线程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty">
+<meta property="og:url" content="http://blog.godder.top/2020/03/20/Netty/">
 <meta property="og:site_name" content="朽木自雕">
+<meta property="og:description" content="IO1. Blocking IO同步堵塞IO模型，即在操作时会发生堵塞持有线程。">
 <meta property="og:locale" content="zh">
+<meta property="og:image" content="http://images.cnitblog.com/blog/405877/201411/142330286789443.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/405877/201411/142332004602984.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/405877/201411/142333254136604.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/405877/201411/142333511475767.png">
+<meta property="og:image" content="http://tutorials.jenkov.com/images/java-nio/overview-selectors.png">
+<meta property="og:image" content="http://tutorials.jenkov.com/images/java-nio/overview-channels-buffers.png">
+<meta property="og:image" content="http://tutorials.jenkov.com/images/java-nio/buffers-modes.png">
+<meta property="og:image" content="http://tutorials.jenkov.com/images/java-nio/pipe-internals.png">
+<meta property="og:image" content="https://atts.w3cschool.cn/attachments/image/20170808/1502159788343920.jpg">
+<meta property="og:image" content="http://blog.godder.top/img/netty/ChannelPipelineUML.png">
+<meta property="og:image" content="http://blog.godder.top/img/netty/ChannelPipeline.png">
+<meta property="og:image" content="https://atts.w3cschool.cn/attachments/image/20170808/1502159712978432.jpg">
+<meta property="og:image" content="http://blog.godder.top/img/netty/channelHandlerLife.png">
+<meta property="og:image" content="http://blog.godder.top/img/netty/ChannelFlowchart.png">
+<meta property="og:image" content="http://blog.godder.top/img/netty/EventLoopUML.png">
+<meta property="og:image" content="https://atts.w3cschool.cn/attachments/image/20170808/1502159181753763.jpg">
+<meta property="og:image" content="http://blog.godder.top/img/netty/BootstrapUML.png">
+<meta property="og:image" content="https://atts.w3cschool.cn/attachments/image/20170808/1502160272114341.jpg">
+<meta property="article:published_time" content="2020-03-20T15:47:40.161Z">
+<meta property="article:modified_time" content="2020-03-20T15:51:07.173Z">
 <meta property="article:author" content="Godder">
-<meta property="article:tag" content="blog">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="nio">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://images.cnitblog.com/blog/405877/201411/142330286789443.png">
   
     <link rel="alternative" href="/atom.xml" title="朽木自雕" type="application/atom+xml">
   
@@ -139,64 +164,413 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Netty" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/" class="archive-article-date">
-  	<time datetime="2019-04-10T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-11</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/">Multi-Level Factorisation Net for Person Re-Identification</a>
+    <h1 class="article-title" itemprop="name">
+      Netty
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/03/20/Netty/" class="archive-article-date">
+  	<time datetime="2020-03-20T15:47:40.161Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><h3 id="1-Blocking-IO"><a href="#1-Blocking-IO" class="headerlink" title="1. Blocking IO"></a>1. Blocking IO</h3><p>同步堵塞IO模型，即在操作时会发生堵塞持有线程。</p>
+<a id="more"></a>
+<p><img src="http://images.cnitblog.com/blog/405877/201411/142330286789443.png" alt=""></p>
+<h3 id="2-Non-blocking-IO"><a href="#2-Non-blocking-IO" class="headerlink" title="2. Non-blocking IO"></a>2. Non-blocking IO</h3><p>同步非堵塞IO在发送消息后立刻返回，不论对方是否完成操作，是否有读到数据。</p>
+<p>如果想要读到数据，则需要多次轮询请求，当对方将数据操作完成时才可以获取到数据。</p>
+<p><img src="http://images.cnitblog.com/blog/405877/201411/142332004602984.png" alt=""></p>
+<h3 id="3-IO-Multiplexing"><a href="#3-IO-Multiplexing" class="headerlink" title="3. IO Multiplexing"></a>3. IO Multiplexing</h3><p>多路IO复用(异步堵塞IO)，基于Reactor设计模式，利用select来实时监控(令其线程)对方是否有数据可以获取，通过select的返回来判断是否发送请求。</p>
+<p><img src="http://images.cnitblog.com/blog/405877/201411/142333254136604.png" alt=""></p>
+<p>这样虽然在select函数一直轮询监听状态浪费了资源，但select却有效提高同一个用户的所有请求。</p>
+<h3 id="4-Asynchronous-IO"><a href="#4-Asynchronous-IO" class="headerlink" title="4. Asynchronous IO"></a>4. Asynchronous IO</h3><p>不同于多路复用IO，select函数告知数据可读取后需要用户自行读取数据，异步IO在数据可读取时将数据自行读取放在buffer内，当用户需要读取时从buffer中提取。</p>
+<p><img src="http://images.cnitblog.com/blog/405877/201411/142333511475767.png" alt=""></p>
+<h2 id="Java-NIO-New-IO"><a href="#Java-NIO-New-IO" class="headerlink" title="Java NIO(New IO)"></a>Java NIO(New IO)</h2><p><img src="http://tutorials.jenkov.com/images/java-nio/overview-selectors.png" alt=""></p>
+<p>不同于一般OIO，NIO采用一个线程处理多个流(stream/channel)，通过selector来选择处理哪一个channel(stream)。每一个channel可以进行读或写的操作(stream只能读或写)。与OIO一样，NIO的每个channel对应一个buffer用来读取数据或存放数据。</p>
+<p><img src="http://tutorials.jenkov.com/images/java-nio/overview-channels-buffers.png" alt=""></p>
+<p>由于是单线程操作，减少了线程间切换的消耗，类似于多路复用。</p>
+<h3 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h3><blockquote>
+<ol>
+<li>Channel</li>
+</ol>
+</blockquote>
+<p>NIO中的Channel与IO中的stream功能类似，同时<strong>支持异步读写</strong></p>
+<ul>
+<li>FileChannel 文件通道</li>
+<li>AsynchronousFileChannel 异步文件通道(可以异步写入和读取文件)</li>
+<li>DataGramChannel UDP报文通道</li>
+<li>SocketChannel TCP读写通道</li>
+<li>ServerSocketChannel 像web服务器一样监听所有tcp的连接。</li>
+</ul>
+<blockquote>
+<ol start="2">
+<li>Buffer</li>
+</ol>
+</blockquote>
+<p>Buffer用来存放数据，作为数据的中转站，同时一个channel可以连多个buffer。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bufferTest</span><span class="params">(FileChannel channel)</span> </span>&#123;</span><br><span class="line">    ByteBuffer buffer = ByteBuf.allocate(<span class="number">64</span>);</span><br><span class="line">	<span class="keyword">int</span> readBytes = channel.read(buffer);</span><br><span class="line">    <span class="keyword">while</span> (readBytes != -<span class="number">1</span>) &#123;</span><br><span class="line">        buf.flip();		<span class="comment">// 初始化读buffer，修改position指针位置，准备读取</span></span><br><span class="line">        <span class="keyword">while</span> (buf.hasRemaining()) &#123;</span><br><span class="line">            LOGGER.info((<span class="keyword">char</span>)buf.get(<span class="number">10</span>)); <span class="comment">// 每次读10个bit</span></span><br><span class="line">        &#125;</span><br><span class="line">        buf.clear();	<span class="comment">// 清空buffer，准备下一次写入</span></span><br><span class="line">        readBytes = channel.read(buf);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://tutorials.jenkov.com/images/java-nio/buffers-modes.png" alt=""></p>
+<p>position: 指针当前位置，读取或写入</p>
+<p>limit：读入或写入的限制</p>
+<p>capacity: Buffer的大小</p>
+<blockquote>
+<ol start="3">
+<li>selector</li>
+</ol>
+</blockquote>
+<p>通过一个线程基于selector利用事件监控来切换不同的channel，在通道有读写事件则切换到需要读写的通道。selector将通过socket方式来监控注册的channel，如果channel发生注册指定事件，selector会进行通知。</p>
+<p>四种事件：</p>
+<ol>
+<li>Connect: OP_CONNECT client连接事件(TCP)</li>
+<li>Accept: OP_ACCEPT server确认连接事件，表示连接已确认</li>
+<li>Read: OP_READ 读取事件，数据已准备被读取(可读取buffer)</li>
+<li>Write: OP_WRITE 写入事件，数据可写入buffer</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">selectorTest</span><span class="params">(FileChannel channel)</span> </span>&#123;</span><br><span class="line">    Selector selector = Selector.open();	<span class="comment">// 获取selector</span></span><br><span class="line">	channel.register(selector, SelectionKey.OP_READ);</span><br><span class="line">    <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取所有可执行的key</span></span><br><span class="line">        Iterator&lt;SelectionKey&gt; keyIterator = selector.selectKeys().iterator();</span><br><span class="line">        <span class="keyword">while</span> (keyInterator.hasNext()) &#123;</span><br><span class="line">            SelectionKey key = keyIterator.next();</span><br><span class="line">            <span class="keyword">if</span> (key.isReadable()) &#123;</span><br><span class="line">                <span class="comment">// read</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">                <span class="comment">// write</span></span><br><span class="line">            &#125;</span><br><span class="line">            keyIterator.remove();	<span class="comment">// 将以处理完的key删除</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="4">
+<li>Pipe</li>
+</ol>
+</blockquote>
+<p>管道用于在连个线程之间单向传播。</p>
+<p><img src="http://tutorials.jenkov.com/images/java-nio/pipe-internals.png" alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// thread A</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writePipe</span><span class="params">(Pipe pipe)</span> </span>&#123;</span><br><span class="line">	Pipe.SinkChannel sinkChannel = pipe.sink();</span><br><span class="line">    String msg = <span class="string">"send by thread A"</span>;</span><br><span class="line">    ByteBuffer buffer = ByteBuffer.allocate(<span class="number">64</span>);</span><br><span class="line">    buffer.clear();</span><br><span class="line">    buffer.put(msg.getBytes());</span><br><span class="line">    buf.flip();</span><br><span class="line">    <span class="keyword">while</span> (buffer.hasRemaining()) &#123;</span><br><span class="line">        sinkChannel.write(buffer);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// thread B</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">readPipe</span><span class="params">(Pipe pipe)</span> </span>&#123;</span><br><span class="line">    Pipe.SourceChannel sourceChannel = pipe.source();</span><br><span class="line">    ByteBuffer buffer = ByteBuffer.allocate(<span class="number">64</span>);</span><br><span class="line">    <span class="keyword">int</span> readBytes = sourceChannel.read(buffer);</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="keyword">while</span> (readBytes != -<span class="number">1</span>) &#123;</span><br><span class="line">        buf.flip();		<span class="comment">// 初始化读buffer，修改position指针位置，准备读取</span></span><br><span class="line">        <span class="keyword">while</span> (buf.hasRemaining()) &#123;</span><br><span class="line">            sb.append((<span class="keyword">char</span>)buf.get(<span class="number">10</span>)); <span class="comment">// 每次读10个bit</span></span><br><span class="line">        &#125;</span><br><span class="line">        buf.clear();	<span class="comment">// 清空buffer，准备下一次写入</span></span><br><span class="line">        readBytes = channel.read(buf);</span><br><span class="line">    &#125;</span><br><span class="line">    LOGGER.info(sb.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-零拷贝"><a href="#2-零拷贝" class="headerlink" title="2. 零拷贝"></a>2. 零拷贝</h3><blockquote>
+<p>传统java IO 数据流</p>
+</blockquote>
+<ol>
+<li>需要从外存读取(<strong>拷贝</strong>)数据到内存的read buffer中，</li>
+<li>再由内存<strong>拷贝</strong>到JVM中对数据进行操作，</li>
+<li>这时在从JVM中<strong>拷贝</strong>到内存的socket buffer中，</li>
+<li>再从socket buffer中<strong>拷贝</strong>到网卡缓存。</li>
+</ol>
+<p>期间一共4次拷贝。</p>
+<blockquote>
+<p>NIO数据流</p>
+</blockquote>
+<p>NIO利用transferTo()函数，实现了read buffer 到 socket buffer之间的拷贝，将2，3过程合并到一步。</p>
+<p>如果NIC(网络接口卡)支持gather操作(Linux 2.4+)，则操作3，4可以合并到一步，这样一共就只有2次拷贝。</p>
+<blockquote>
+<p>实现函数</p>
+</blockquote>
+<p>transferTo()方法底层由native方法transferTo0()实现。</p>
+<h3 id="3-内存直接修改"><a href="#3-内存直接修改" class="headerlink" title="3.内存直接修改"></a>3.内存直接修改</h3><blockquote>
+<p>直接内存</p>
+</blockquote>
+<p>直接内存(mmap)，将文件映射到内核空间内存，返回一个操作地址，这样就不需要将文件拷贝到用户线程内存(JVM)中，直接在内核空间进行操作。</p>
+<blockquote>
+<p>MappedByteBuffer</p>
+</blockquote>
+<p>通过FileChannel.map()方法将文件映射在内存的地址返回，通过返回的地址构建成ByteBuffer。</p>
+<p>==MappedByteBuffer的内存是堆外的内存，不受到Minor GC控制，只能通过Full GC回收==</p>
+<h2 id="事务驱动IO"><a href="#事务驱动IO" class="headerlink" title="事务驱动IO"></a>事务驱动IO</h2><p>Netty是异步事件驱动的NIO框架，Netty的所有IO操作都是异步非堵塞的。而Netty的所有事件不会同步，采用多线程处理IO事件。</p>
+<h3 id="1-Channel"><a href="#1-Channel" class="headerlink" title="1. Channel"></a>1. Channel</h3><p>Netty的Channel相当于NIO中的Channel的一个超集，在NIO中Channel的基础上增加了多个与socket交互的操作。</p>
+<blockquote>
+<p> ChannelHandler</p>
+</blockquote>
+<p>用于处理Channel，由特定的事件触发。</p>
+<blockquote>
+<p>ChannelPipeLine</p>
+</blockquote>
+<p>ChannelHandler的通道，用来把操作按照指定顺序执行。</p>
+<p><img src="https://atts.w3cschool.cn/attachments/image/20170808/1502159788343920.jpg" alt=""></p>
+<p>ChannelPipeline的UML类图</p>
+<p><img src="/img/netty/ChannelPipelineUML.png" alt=""></p>
+<p>ChannelPipeline提供了API对内部handler进行操作</p>
+<p><img src="/img/netty/ChannelPipeline.png" alt=""></p>
+<blockquote>
+<p>ChannelFuture</p>
+</blockquote>
+<p>由于所有的Netty IO都是异步，通过ChannelFuture获取操作的返回。通过注册ChannelFutureListener来监控，当操作完成时会进行通知(不论成功)</p>
+<h4 id="声明周期"><a href="#声明周期" class="headerlink" title="声明周期"></a>声明周期</h4><p><img src="https://atts.w3cschool.cn/attachments/image/20170808/1502159712978432.jpg" alt=""></p>
+<ul>
+<li>channelRegistered: channel 注册到EventLoop</li>
+<li>channelActive：channel变为活跃状态，可以接收和发送数据</li>
+<li>channellnactive: channel变为非活跃，断开连接</li>
+<li>channelUnregistered: channel创建但没注册EventLoop</li>
+</ul>
+<h4 id="ChannelHandler"><a href="#ChannelHandler" class="headerlink" title="ChannelHandler"></a>ChannelHandler</h4><blockquote>
+<p>声明周期</p>
+</blockquote>
+<p><img src="/img/netty/channelHandlerLife.png" alt=""></p>
+<ul>
+<li>handerAdded: channelHandler添加到ChannelPipeline</li>
+<li>handerRemoved: channelHandler 从channelPipeline中移除</li>
+<li>exceptionCaught: channelHandler 执行时抛出异常</li>
+</ul>
+<blockquote>
+<p>数据处理接口</p>
+</blockquote>
+<ul>
+<li>channelInBoundHandler: 数据进入的处理</li>
+<li>channelOutboundHandler: 处理输出的数据</li>
+</ul>
+<h5 id="channelInBoundHandler"><a href="#channelInBoundHandler" class="headerlink" title="channelInBoundHandler"></a>channelInBoundHandler</h5><blockquote>
+<p>生命周期函数</p>
+</blockquote>
+<ul>
+<li>channelRegistered(ctx): channel注册到eventLoop，并且可以处理了IO事件</li>
+<li>channelActive(ctx): channel处于活跃状态，并且已连接</li>
+<li>channelRead(ctx, msg): 从channel中读取数据（关键）</li>
+<li>channelReadComplete(ctx): 读取数据后</li>
+<li>channelWritabilityChanged(ctx): channel的可写属性修改时操作</li>
+<li>userEventTriggered(cxt, evt): 当用户调用Channel.fireUserEventTriggered()</li>
+<li>channellnactive(ctx): channel不再连接</li>
+<li>channelUnregistered(ctx): channel不在eventLoop中注册</li>
+</ul>
+<blockquote>
+<p> ChannelInBoundAdapter</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pubilc <span class="class"><span class="keyword">class</span> <span class="title">InBoundHandler</span> <span class="keyword">extends</span> <span class="title">ChannelInBoundAdapter</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">channelRead</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        ReferenceCountUtil.release(msg);	<span class="comment">// 释放资源</span></span><br><span class="line">    &#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在释放资源时如果失败会在WARN log中提示，需要手动释放资源</p>
+<blockquote>
+<p>SimpleChannelInBoundAdapter</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pubilc <span class="class"><span class="keyword">class</span> <span class="title">InBoundHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInBoundAdapter</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">channelRead</span><span class="params">(ChannelHandlerContext ctx, Object msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 不需要手动释放资源</span></span><br><span class="line">    &#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="channelOutBoundHandler"><a href="#channelOutBoundHandler" class="headerlink" title="channelOutBoundHandler"></a>channelOutBoundHandler</h5><p>提供数据调出时的操作，这些方法会被Channel, ChannelPipeline 和 ChannelHandlerContext调用。</p>
+<p>同时提供了延迟刷新的功能。</p>
+<blockquote>
+<p>功能函数</p>
+</blockquote>
+<ul>
+<li>bind(ctx, socketAddress, promise): 将当前channel绑定到一个本地地址</li>
+<li>connect(ctx, remoteAddress, localAddress, promise): 将当前channel绑定到远程地址</li>
+<li>disconnect(ctx, promise): 断开当前channel于其他远程地址的连接</li>
+<li>deregister(ctx, promise): 处理当前channel从EventLoop注销</li>
+<li>read(ctx): 当需要读取更多信息时(不读取，只处理事件)</li>
+<li>write(ctx, msg, promise): 执行写操作</li>
+<li>flush(ctx): 刷新通道向远程发送的数据</li>
+<li>close(ctx, promise): 通道关闭时事务</li>
+</ul>
+<blockquote>
+<p>ChannelHandlerContext</p>
+</blockquote>
+<p>不同handler之间用于信息传递的载体</p>
+<p><img src="/img/netty/ChannelFlowchart.png" alt=""></p>
+<blockquote>
+<p>ChannelPromise</p>
+</blockquote>
+<p>ChannelOutBoundHandler中绝大数的函数需要传递ChannelPromise参数，promise函数用于通知操作是否完成。</p>
+<h3 id="2-EventLoop"><a href="#2-EventLoop" class="headerlink" title="2. EventLoop"></a>2. EventLoop</h3><p>用于处理channel的IO操作。一个EventLoop可以处理多个Channel事件。</p>
+<blockquote>
+<p>事件循环</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(!terminated) &#123;</span><br><span class="line">	List&lt;Runnable&gt; readyEvents = BlockingUntilReady();	<span class="comment">// 堵塞直到事件准备运行</span></span><br><span class="line">    <span class="keyword">for</span> (Runnable event: readyEvenets) &#123;event.run();&#125;	<span class="comment">// 循环执行</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/netty/EventLoopUML.png" alt=""></p>
+<blockquote>
+<p>任务循环调度</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Channel channel = <span class="keyword">null</span>;</span><br><span class="line">ScheduledFuture&lt;?&gt; future = channel.eventLoop().schedule(() -&gt; &#123;</span><br><span class="line">    <span class="comment">// do something 60s/once</span></span><br><span class="line">&#125;, <span class="number">60</span>, TimeUnit.SECONDS);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-EventLoopGroup"><a href="#3-EventLoopGroup" class="headerlink" title="3. EventLoopGroup"></a>3. EventLoopGroup</h3><p>Netty采用EventLoopGroup对EventLoop进行管理，为Channel提供IO服务。</p>
+<p><img src="https://atts.w3cschool.cn/attachments/image/20170808/1502159181753763.jpg" alt=""></p>
+<ol>
+<li>所有的EventLoop由EventLoopGroup分配(上图中一个Group绑定4个)</li>
+<li>EventLoop处理所有注册到其中Channel的事件和任务，每个EventLoop绑定一个Thread</li>
+</ol>
+<h3 id="4-Bootstrap"><a href="#4-Bootstrap" class="headerlink" title="4. Bootstrap"></a>4. Bootstrap</h3><p>用于引导配置，分为Bootstrap(用于client连接远程主机和端口)，ServerBootstrap(用于server绑定本地)</p>
+<p><img src="/img/netty/BootstrapUML.png" alt=""></p>
+<blockquote>
+<p>server Bootstrap</p>
+</blockquote>
+<p>对于ServerBootstrap，事件组内包含俩个bossGroup和workGroup，bossGroup包含所有连接的channel，用于接收所有client传来的消息；workGroup包含一个ServerChannel，用于处理本地的信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">    EventLoopGroup workGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">    ServerBootstrap bootstrap = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">    bootstrap.group(bossGroup, workGroup)			<span class="comment">// 绑定group</span></span><br><span class="line">             .channel(NioServerSocketChannel<span class="class">.<span class="keyword">class</span>)	// 确定注册<span class="title">Channel</span>的类型</span></span><br><span class="line"><span class="class">        	 .<span class="title">localAddress</span>(<span class="title">new</span> <span class="title">SocketAddress</span>())		// 本地地址绑定</span></span><br><span class="line"><span class="class">        	 .<span class="title">childHandler</span>(<span class="title">new</span> <span class="title">ChannelHandler</span>())	// 对<span class="title">channel</span>的处理</span></span><br><span class="line"><span class="class">    // <span class="title">config</span> <span class="title">and</span> <span class="title">bind</span> ...</span></span><br><span class="line"><span class="class">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>client Bootstrap</p>
+</blockquote>
+<p><img src="https://atts.w3cschool.cn/attachments/image/20170808/1502160272114341.jpg" alt=""></p>
+<ol>
+<li>将通道进行绑定并返回一个ChannelFuture,用于通知操作结果</li>
+<li>连接到远程地址，并返回ChannelFuture用于通知操作结果</li>
+</ol>
+<h2 id="Codec"><a href="#Codec" class="headerlink" title="Codec"></a>Codec</h2><p>对于一个webApp，其本质为codec</p>
+<h3 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h3><p>用于ChannelInBoundHandler过程中</p>
+<ul>
+<li>字节到消息</li>
+</ul>
+<blockquote>
+<p>ByteToMessageDecoder</p>
+</blockquote>
+<p>将字节转换为消息(Object)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerDecoder</span> <span class="keyword">extends</span> <span class="title">ByteToMessageDecoder</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(ChannelHandlerContext ctx, ByteBuf in, List&lt;Object&gt; out)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (in.readableBytes() &gt;= <span class="number">4</span>) &#123;out.add(in.readInt());&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上例以byte -&gt; int decode为例，这里要考虑byte的个数，4个byte一个int</p>
+<blockquote>
+<p>ReplayingDecoder</p>
+</blockquote>
+<p>与ByteToMessageDecoder功能类似，但不同的是它可以自动检测字节数，个数不足则自动暂停</p>
+<ul>
+<li>消息到消息</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringToInteger</span> <span class="keyword">extends</span> <span class="title">MessageToMessageDecoder</span>&lt;<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(ChannelHandlerContext ctx, String msg, List&lt;Object&gt; out)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        out.add(Integer.parseInt(msg));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Encoder"><a href="#Encoder" class="headerlink" title="Encoder"></a>Encoder</h3><p>用于ChannelOutBoundHandler过程中</p>
+<ul>
+<li>消息到字节</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StringToByteEncoder</span> <span class="keyword">extends</span> <span class="title">MessageToByteEncoder</span>&lt;<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">encode</span><span class="params">(ChannelHandlerContext channelHandlerContext, String s, ByteBuf byteBuf)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        byteBuf.writeCharSequence(s, Charset.defaultCharset());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>消息到消息</li>
+</ul>
+<p>与MessageToMessageDecoder功能一直，接口一直，不同的是该方法作用在输出过程</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">re-id</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">web</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">nio</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2020/03/20/Netty/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2020/03/17/%E5%90%8E%E7%AB%AFWeb%E5%AE%89%E5%85%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">后端Web安全</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IO"><span class="toc-number">1.</span> <span class="toc-text">IO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Blocking-IO"><span class="toc-number">1.1.</span> <span class="toc-text">1. Blocking IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Non-blocking-IO"><span class="toc-number">1.2.</span> <span class="toc-text">2. Non-blocking IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-IO-Multiplexing"><span class="toc-number">1.3.</span> <span class="toc-text">3. IO Multiplexing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Asynchronous-IO"><span class="toc-number">1.4.</span> <span class="toc-text">4. Asynchronous IO</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-NIO-New-IO"><span class="toc-number">2.</span> <span class="toc-text">Java NIO(New IO)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-介绍"><span class="toc-number">2.1.</span> <span class="toc-text">1. 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-零拷贝"><span class="toc-number">2.2.</span> <span class="toc-text">2. 零拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-内存直接修改"><span class="toc-number">2.3.</span> <span class="toc-text">3.内存直接修改</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#事务驱动IO"><span class="toc-number">3.</span> <span class="toc-text">事务驱动IO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Channel"><span class="toc-number">3.1.</span> <span class="toc-text">1. Channel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#声明周期"><span class="toc-number">3.1.1.</span> <span class="toc-text">声明周期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ChannelHandler"><span class="toc-number">3.1.2.</span> <span class="toc-text">ChannelHandler</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#channelInBoundHandler"><span class="toc-number">3.1.2.1.</span> <span class="toc-text">channelInBoundHandler</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#channelOutBoundHandler"><span class="toc-number">3.1.2.2.</span> <span class="toc-text">channelOutBoundHandler</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-EventLoop"><span class="toc-number">3.2.</span> <span class="toc-text">2. EventLoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-EventLoopGroup"><span class="toc-number">3.3.</span> <span class="toc-text">3. EventLoopGroup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Bootstrap"><span class="toc-number">3.4.</span> <span class="toc-text">4. Bootstrap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Codec"><span class="toc-number">4.</span> <span class="toc-text">Codec</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Decoder"><span class="toc-number">4.1.</span> <span class="toc-text">Decoder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Encoder"><span class="toc-number">4.2.</span> <span class="toc-text">Encoder</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -219,9 +593,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
