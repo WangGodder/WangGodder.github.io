@@ -164,197 +164,9 @@
         <h2 id="Docker原理"><a href="#Docker原理" class="headerlink" title="Docker原理"></a>Docker原理</h2><h3 id="Linux资源隔离"><a href="#Linux资源隔离" class="headerlink" title="Linux资源隔离"></a>Linux资源隔离</h3><p>linux内核采用namespace的方式将进程的资源进行隔离：</p>
 <p>属于同一namespace下的进程可以访问的相同的资源，同时进程之间也是可见的；</p>
 <p>不属于同一namespace下的进程之间不可见。</p>
-<p>reference： <a href="http://man7.org/linux/man-pages/man7/namespaces.7.htm" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man7/namespaces.7.htm</a></p>
-<p>Linux内核提供以下基本隔离方式</p>
-<table>
-<thead>
-<tr>
-<th>Namespace</th>
-<th>Flag</th>
-<th>Isolates(资源隔离)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Cgroup</td>
-<td>CLONE_NEWCGROUP</td>
-<td>Cgroup 根目录</td>
-</tr>
-<tr>
-<td>IPC</td>
-<td>CLONE_NEWIPC</td>
-<td>信号量、消息队列、共享内存，POSIX标准的消息队列</td>
-</tr>
-<tr>
-<td>Network</td>
-<td>CLONE_NEWNET</td>
-<td>网络设备、栈、端口等</td>
-</tr>
-<tr>
-<td>Mount</td>
-<td>CLONE_NETNS</td>
-<td>挂载点</td>
-</tr>
-<tr>
-<td>PID</td>
-<td>CLONE_NEWPID</td>
-<td>进程ID</td>
-</tr>
-<tr>
-<td>User</td>
-<td>CLONE_NEWUSER</td>
-<td>用户和用户进程ID</td>
-</tr>
-<tr>
-<td>UTS</td>
-<td>CLONE_NEWUTS</td>
-<td>hostname，域名，NIS(network information service)</td>
-</tr>
-</tbody></table>
-<p>可以通过以下命令查看当前bash进程下所属的namespace</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ll /proc/$$/ns</span><br></pre></td></tr></table></figure>
-
-<p><img src="/img/docker/linuxDefaultNamespace.png" alt=""></p>
-<blockquote>
-<p>Cgroup</p>
-</blockquote>
-<p>为系统中运行进程的用户定义群组分配资源(CPU, 内存, IO)，并对线程控制提供如下功能</p>
-<ul>
-<li>资源限制</li>
-<li>优先级控制</li>
-<li>统计功能</li>
-<li>进程挂起/恢复</li>
-</ul>
-<p>linux中采用文件系统来实现CGroup，在/sys/fs/cgroup/ 路径下可以查看CGroup拥有的子系统(每个子系统都有对应的资源管理和使用)</p>
-<p><img src="/img/docker/containerCgroup.png" alt=""></p>
-<p>每个CGroup都是被一组相同的标准和参数限制的<strong>进程</strong>， 不同的CGroup之间可以通过从父线程继承获取属性。在CGroup中，其中的任务就是系统一个进程，CGroup就是一组按照某一标准划分的进程，所有资源控制都是<strong>以CGroup为单元</strong>实现的</p>
-<blockquote>
-<p>clone 函数</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sche.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">clone</span><span class="params">(<span class="keyword">int</span> (*fn)(<span class="keyword">void</span> *), <span class="keyword">void</span> *child_stack, <span class="keyword">int</span> flags, <span class="keyword">void</span> *args)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p><strong>==Linux的用户进程不能直接创建，需要从某个进程中复制出来，再通过exec等API切换到运行的程序文件==</strong></p>
-<p>在复制线程时需要复制父线程的信息(进程PCB, 线程系统堆栈, 进程的用户空间, 进程打开的设备)；</p>
-<p>fork函数将父线程的所有信息都复制到创建的子线程，而clone只复制进程的用户空间和打开的设备，<strong>进程PCB和系统堆栈</strong>需要自己创建或指定。</p>
-<ul>
-<li>fn: 函数指针，指向程序的指针</li>
-<li>child_stack: 为子线程分配的系统堆栈空间</li>
-<li>flags: 描述从父线程继承的资源(CLONE_*的标志位)</li>
-<li>args: 传给子进程的参数(fn函数的参数)</li>
-</ul>
-<blockquote>
-<p>setns函数</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sched.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setns</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> nstype)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>用于将当前线程加入到已有的namespace中。</p>
-<ul>
-<li>fd: 要加入的namespace的文件描述符，其位于/proc/[pid]/ns/目录下</li>
-<li>nstype: 表示要加入的namespace类型(0: 任意类型, CLONE_*)</li>
-</ul>
-<blockquote>
-<p>unshare函数</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sched.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unshare</span><span class="params">(<span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>用于将当前线程(或进程)的namespace更改，使其进入新的namespace。(在原函数上隔离)</p>
-<ul>
-<li>flags: 改变的namespace(CLONE_*)</li>
-</ul>
-<h3 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h3><p><img src="/img/docker/VMandContainer.png" alt=""></p>
-<blockquote>
-<p>虚拟机</p>
-</blockquote>
-<p>基于虚拟机管理系统(Hypervistor)上，在主机上运行多个不同的操作系统。</p>
-<blockquote>
-<p>虚拟容器</p>
-</blockquote>
-<p>基于docker deamon(docker守护进程)，不同的OS在docker内部运行，当需要开启应用时，基于docker开启一个镜像(Image)。</p>
-<h3 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h3><blockquote>
-<p>镜像资源隔离</p>
-</blockquote>
-<p>利用UTS(unix time-sharing  system) namespace隔离机制，将每个镜像进行隔离，每个镜像的hostname采用为自身提供服务的名称，这样隔离了image与host主机之间的资源。</p>
-<blockquote>
-<p>docker容器内部进程资源隔离</p>
-</blockquote>
-<p>在docker容器中查看使用 ps -ef 命令查看进程只能发现容器内的进程，无法查看到host的进程</p>
-<p>利用CLONE_NEWPID实现进程的资源隔离</p>
-<blockquote>
-<p>container资源隔离</p>
-</blockquote>
-<p>当docker启动一个容器后，在启动容器的/sys/fs/cgroup/cpu/docker/路径下生成cgroup的资源配置，而其中又会对每个容器进行对应的配置</p>
-<p><img src="/img/docker/dockerCGroup.png" alt=""></p>
-<h3 id="存储驱动"><a href="#存储驱动" class="headerlink" title="存储驱动"></a>存储驱动</h3><p>在docker中，Image用于存储文件和数据信息，<strong>其实质上就是文件</strong>。而启动一个Image需要创建一个Container，存储驱动引擎能够在多个container之间共享存储，因此与一般的卷存储不同。</p>
-<hr>
-<p>在使用docker build命令创建新的image时，Dockerfile中每个命令都会创建一个新的image layer。</p>
-<p>例如我们在创建一个基于python的镜像，利用 docker history命令查看image的每层的变化</p>
-<p><img src="/img/docker/ImageHistory.png" alt=""></p>
-<p>对应的dockerfile为</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python</span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> app.py /</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip install flask</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">5000</span></span><br></pre></td></tr></table></figure>
-
-<p>能看出CMD(从父镜像继承)的执行创建了一个image layer，ADD，RUN，EXPOSE操作都分别创建了一个image layer。从下面的missing Image是不存在当地的image，这样从base image到webapp形成了一个完整的过程。</p>
-<h3 id="AUFS"><a href="#AUFS" class="headerlink" title="AUFS"></a>AUFS</h3><h4 id="UnionFS"><a href="#UnionFS" class="headerlink" title="UnionFS"></a>UnionFS</h4><p>文件联合系统，把多个目录内容联合挂载到同一个目录下，而目录的物理位置是分离；支持同时删除和添加内容。</p>
-<h4 id="AUFS-1"><a href="#AUFS-1" class="headerlink" title="AUFS"></a>AUFS</h4><p>advanced UnionFS 能够将不同文件夹中内容联合到同一文件夹中。例如image文件存储在/var/lib/doccker/aufs/diff/目录下，而数据文件存储在/var/lib/docker/aufs/layers/, /var/lib/docker/aufs/mnt/包含挂载点。</p>
-<h3 id="网络模式"><a href="#网络模式" class="headerlink" title="网络模式"></a>网络模式</h3><p>通过namespace进行隔离的同时，也隔离了网络的资源，可以通过命令docker network ls查看提供的网络模式。docker默认使用bridge模式</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&gt; docker network ls</span><br><span class="line">NETWORK ID          NAME                DRIVER              SCOPE</span><br><span class="line">6c5268cbd5f5        bridge              bridge              <span class="built_in">local</span></span><br><span class="line">599c84f708c8        host                host                <span class="built_in">local</span></span><br><span class="line">248a5c6f89b4        none                null                <span class="built_in">local</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>None: 不配置网卡，只有IO</li>
-<li>host：共享host的网络栈，网络配置与主机一致。可以获得大的IO，但可能端口冲突</li>
-<li>bridge：隔离网络namespace外，还为所有container配置IP地址，之后通过网桥docker0进行连接</li>
-</ul>
-<blockquote>
-<p>host 端口映射</p>
-</blockquote>
-<p>例如执行如下命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&gt; docker run -d --name redis-server -p 8000:6379 redis</span><br></pre></td></tr></table></figure>
-
-<p>在本地8000端口映射为docker container 的 6379端口，后通过redis-cli连接</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&gt; redis-cli -p 8000</span><br><span class="line">127.0.0.1:8000&gt;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>container 通讯</p>
-</blockquote>
-<p>基于ubuntu的base image创建俩个container。</p>
-<p>对于container1，IP地址为127.17.0.4</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$&gt;docker run -it --name ubuntu-test1 ubuntu-apps</span><br><span class="line">root@f180eb82ac34:/<span class="comment"># ifconfig</span></span><br><span class="line">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 172.17.0.4  netmask 255.255.0.0  broadcast 172.17.255.255</span><br><span class="line">        ether 02:42:ac:11:00:04  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 7  bytes 586 (586.0 B)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 0  bytes 0 (0.0 B)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536</span><br><span class="line">        inet 127.0.0.1  netmask 255.0.0.0</span><br><span class="line">        loop  txqueuelen 1000  (Local Loopback)</span><br><span class="line">        RX packets 0  bytes 0 (0.0 B)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 0  bytes 0 (0.0 B)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
-
-<p>container2，IP地址为 127.17.0.5</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@f180eb82ac34:/<span class="comment"># ping 127.17.0.4</span></span><br><span class="line">PING 127.17.0.4 (127.17.0.4) 56(84) bytes of data.</span><br><span class="line">64 bytes from 127.17.0.4: icmp_seq=1 ttl=64 time=0.024 ms</span><br><span class="line">64 bytes from 127.17.0.4: icmp_seq=2 ttl=64 time=0.033 ms</span><br><span class="line">64 bytes from 127.17.0.4: icmp_seq=3 ttl=64 time=0.024 ms</span><br></pre></td></tr></table></figure>
-
-<p>这时由container1向container2ping 是可以连通的。</p>
-<h2 id="Docker基础操作"><a href="#Docker基础操作" class="headerlink" title="Docker基础操作"></a>Docker基础操作</h2><h3 id="docker-Engine"><a href="#docker-Engine" class="headerlink" title="docker Engine"></a>docker Engine</h3><ul>
-<li>后台进程(docker deamon)</li>
-<li>Rest API</li>
-<li>CLI</li>
-</ul>
-<p><img src="/img/docker/dockerEngine.png" alt=""></p>
-<p><img src="/img/docker/dockerRun.png" alt=""></p>
-<h3 id="Image"><a href="#Image" class="headerlink" title="Image"></a>Image</h3><ul>
-<li>文件和数据的集合(包含独立的文件系统，和host共享内核) ==<strong>Image就是一个文件(压缩包)</strong>==</li>
-<li>image是分层的，即每个image基于其他的image(base image)，每一层可以修改文件形成新的image</li>
-<li>不同的Image可以共享相同的层(例如共享base image)</li>
-<li>Image是只读的</li>
-</ul>
-<p>Image 相关命令： <a href="https://docs.docker.com/engine/reference/commandline/image/" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/commandline/image/</a></p>
-<h3 id="Container-1"><a href="#Container-1" class="headerlink" title="Container"></a>Container</h3><ul>
-<li>通过Image拷贝创建(image为类，container为实例对象)</li>
-<li>在Image layer 上建立的 可读写的 container layer</li>
-<li>container负责运行APP， image负责存储状态</li>
-</ul>
-<h3 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h3><p>通过Dockerfile创建一个新的Image。 <a href="https://docs.docker.com/engine/reference/builder/" target="_blank" rel="noopener">https://docs.docker.com/engine/reference/builder/</a></p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> scratch 		<span class="comment"># 基于base image</span></span><br><span class="line"><span class="keyword">FROM</span> ubuntu			<span class="comment"># 基于ubuntu image</span></span><br><span class="line"><span class="comment"># 使用官方的image作为继承的image</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">LABEL</span><span class="bash"> version=<span class="string">"1.0"</span> description=<span class="string">"description"</span>	<span class="comment"># 设置元数据</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt update &amp;&amp; apt install vim		<span class="comment"># 执行命令 apt update， apt install vim</span></span></span><br><span class="line"><span class="comment"># 所有的命令写在一行中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"run after container run"</span>		<span class="comment"># 在容器启动后运行的命令和设置的参数</span></span></span><br><span class="line"><span class="comment"># 如果docker run指定了其他命令，则会被覆盖，若定义多个则只有最后一个执行</span></span><br><span class="line"><span class="comment"># 用来与ENTRYPORT 配合，设定命令的默认参数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"run when container running"</span> <span class="comment"># 在容器启动后按照服务的模式执行(后台进程)</span></span></span><br><span class="line"><span class="comment"># 不会被忽略，与CMD配置，ENTRYPOINT设置命令，CMD配置参数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /root		<span class="comment"># 初始路径设置为/root </span></span></span><br><span class="line"><span class="comment"># 功能等同于cd，但建议使用WORKDIR，如果路径不存在则创建，建议使用绝对路径</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> somethingRun .	<span class="comment"># 将二进制文件添加到当前路径中(自动解压缩文件)</span></span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> hello / 		<span class="comment"># 将二进制文件复制到根路径中，不会自动解压(优先使用COPY)</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> MYSQL_VERSION <span class="number">8.0</span>	<span class="comment"># 设置常量	在其他命令中可以使用</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span>/udp		<span class="comment"># 容器在运行时监听80端口，采用udp协议，默认TCP</span></span><br><span class="line"><span class="comment"># 可以通过 docker run IMAGE -p 80:80 来将container的80端口映射到host的80端口</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">VOLUME</span><span class="bash"> /var/lib/mysql	<span class="comment"># 数据持久化路径，持久化container目录下的文件</span></span></span><br><span class="line"><span class="comment"># 可以通过 docker run -v [name]:[path] 在运行时配置</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</span><br></pre></td></tr></table></figure>
-
-<h3 id="Overlay"><a href="#Overlay" class="headerlink" title="Overlay"></a>Overlay</h3><p>通过创建overlay网络，配合分布式存储系统(etcd)实现多host之间的docker通信(需要在启动时配置)</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&gt; docker network create -d overlay demo</span><br></pre></td></tr></table></figure>
-
-<h3 id="数据持久化"><a href="#数据持久化" class="headerlink" title="数据持久化"></a>数据持久化</h3><h4 id="Data-Volume"><a href="#Data-Volume" class="headerlink" title="Data Volume"></a>Data Volume</h4><p>可以通过docker volume ls 查看创建的volume，container通过volume保证数据不会丢失。</p>
-<p>例如我们可以通过保存volume，让不同的container读取获取相同的数据</p>
-<h4 id="bind-Mounting"><a href="#bind-Mounting" class="headerlink" title="bind Mounting"></a>bind Mounting</h4><p>将container的某一个目录与当前host的某一个目录内容同步。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v [host dir]:[container dir]</span><br></pre></td></tr></table></figure>
-
-
+        
+          <a class="article-more-a" href="/2020/03/23/Docker%E5%9F%BA%E7%A1%80/#more">more >></a>
+        
       
 
       
@@ -1251,7 +1063,27 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">cross-modal hashing</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">pytorch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">cross-modal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">web</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1267,19 +1099,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">cross-modal hashing</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">pytorch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">web</a>
+                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1291,15 +1111,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">nio</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">re-id</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1307,11 +1119,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
+                <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
+                <a href="javascript:void(0)" class="js-tag color4">分布式</a>
               </li>
              
               <li class="article-tag-list-item">
