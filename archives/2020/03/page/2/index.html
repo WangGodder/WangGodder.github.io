@@ -6,19 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>提升方法--提升树(boosting tree) | 朽木自雕</title>
+  <title>Archives: 2020/3 | 朽木自雕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="提升树(BT)">
-<meta property="og:type" content="article">
-<meta property="og:title" content="提升方法--提升树(boosting tree)">
-<meta property="og:url" content="http://blog.godder.top/2020/03/14/%E6%8F%90%E5%8D%87%E6%96%B9%E6%B3%95--%E6%8F%90%E5%8D%87%E6%A0%91(boosting%20tree)/">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="朽木自雕">
+<meta property="og:url" content="http://blog.godder.top/archives/2020/03/page/2/">
 <meta property="og:site_name" content="朽木自雕">
-<meta property="og:description" content="提升树(BT)">
 <meta property="og:locale" content="zh">
-<meta property="article:published_time" content="2020-03-13T17:36:20.490Z">
-<meta property="article:modified_time" content="2020-03-17T08:35:38.550Z">
 <meta property="article:author" content="Godder">
-<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="blog">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="朽木自雕" type="application/atom+xml">
@@ -143,214 +139,71 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-提升方法--提升树(boosting tree)" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      提升方法--提升树(boosting tree)
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2020/03/02/Deep%20Cross-Modal%20Hashing%E6%80%BB%E7%BB%93/" class="archive-article-date">
+  	<time datetime="2020-03-01T16:26:39.409Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2020/03/02/Deep%20Cross-Modal%20Hashing%E6%80%BB%E7%BB%93/">Deep Cross-Modal Hashing总结</a>
     </h1>
   
 
-        
-        <a href="/2020/03/14/%E6%8F%90%E5%8D%87%E6%96%B9%E6%B3%95--%E6%8F%90%E5%8D%87%E6%A0%91(boosting%20tree)/" class="archive-article-date">
-  	<time datetime="2020-03-13T17:36:20.490Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="提升树-BT"><a href="#提升树-BT" class="headerlink" title="提升树(BT)"></a>提升树(BT)</h2><a id="more"></a>
-<p>对于分类问题，提升树的决策树是二叉决策树；对于回归问题，提升树的决策树是二叉回归树。</p>
-<p>提升树的模型为基础的加法模型$$f(\vec{x}) = f_M(\vec{x})=\sum_{m=1}^Mh_m(\vec{x};\theta_m)$$, 其中$h_m(\vec{x};\theta_m)$表示第m个决策树，$\theta_m$表示第m个决策树的参数。</p>
-<p>提升树采用前向分步算法：</p>
-<ol>
-<li>确定初始提升树 $f_0(\vec{x}) = 0$</li>
-<li>第n步($n\ge1$)的模型为: $f_n(\vec{x})=f_{n-1}(\vec{x})+h_n(\vec{x};\theta_m)$,其中$h_n(\vec{x};\theta_n)$是待求的第n个决策树</li>
-<li>通过方差极小化来求出第n个决策树的参数$\theta_n=\arg \min_{\theta_m}\sum_i^nL(\hat{y_i}, f_n(\vec{x_i}))$</li>
-</ol>
-<p>对于回归问题，损失函数选用平方误差$L(\bar{y}, \hat{y})=(\bar{y} - \hat{y})^2$; 分类问题用指数损失$L(\bar{y}, \hat{y})=\exp^{-\bar{y}\hat{y}}$</p>
-<p>对于提升树的每颗决策树都是在学习之前所有决策树和的残差。</p>
-<hr>
-<p>例如$F_0(x)$与目标值$\hat{y}$的残差用来训练有$F_0{x}$转换到$F_1(x)$的函数$f_1(x)$，$F_1(x)=F_0(x)+f_1(x)$;</p>
-<p>同理，用$F_1(x)$与$\hat{y}$的残差来训练$f_2(x)$。</p>
-<p>例如回归问题：$L(\hat{y},f_n(x_n)) = L(\hat{y}, f_{n-1}(x_{n-1}) + h_n(x_n))=(\hat{y}-f_{n-1}(x_{n-1})-h_n(x_n))^2$</p>
-<p>所以当前模型的决策树只需要拟合当前的残差模型($(r-h_n(x_n))^2$其中$r$为当前模型的残差)</p>
-<hr>
-<h3 id="调用sklearn"><a href="#调用sklearn" class="headerlink" title="调用sklearn"></a>调用sklearn</h3><p>这里做回归问题的代码例子</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> BaggingRegressor</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeRegressor</span><br><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"><span class="comment"># Settings</span></span><br><span class="line">n_repeat = <span class="number">50</span>       <span class="comment"># Number of iterations for computing expectations</span></span><br><span class="line">n_train = <span class="number">50</span>        <span class="comment"># Size of the training set</span></span><br><span class="line">n_test = <span class="number">1000</span>       <span class="comment"># Size of the test set</span></span><br><span class="line">noise = <span class="number">0.1</span>         <span class="comment"># Standard deviation of the noise</span></span><br><span class="line">np.random.seed(<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 回归决策树为基础的递归提升算法</span></span><br><span class="line">estimator = BaggingRegressor(DecisionTreeRegressor())</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span>				<span class="comment"># 返回 e^(-x^2) + 1.5e^(-(x-2)^2)</span></span><br><span class="line">    x = x.ravel()		<span class="comment"># 作用同flatten，但操作在原对象</span></span><br><span class="line">    <span class="keyword">return</span> np.exp(-x ** <span class="number">2</span>) + <span class="number">1.5</span> * np.exp(-(x<span class="number">-2</span>) ** <span class="number">2</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate</span><span class="params">(n_samples, noise, n_repeat=<span class="number">1</span>)</span>:</span></span><br><span class="line">    X = np.random.rand(n_samples) * <span class="number">10</span> - <span class="number">5</span></span><br><span class="line">    X = np.sort(X)</span><br><span class="line">    <span class="keyword">if</span> n_repeat == <span class="number">1</span>:</span><br><span class="line">        y = f(X) + np.random.normal(<span class="number">.0</span>, noise, n_sample)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        y = np.zeros((n_samples, n_repeat))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n_repeat):</span><br><span class="line">            y[:, i] = f(X) + np.random.normal(<span class="number">.0</span>, noise, n_samples)</span><br><span class="line">    X = X.reshape((n_samples, <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> X, y</span><br><span class="line">X_train = y_train = []			<span class="comment"># 创建训练集，多次创建一样的数据+噪音</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n_repeat):</span><br><span class="line">    X, y = generate(n_train, noise)</span><br><span class="line">    X_train.append(X)</span><br><span class="line">    y_train.append(y)</span><br><span class="line">X_test, y_test = generate(n_test, noise, n_repeat)	<span class="comment"># 创建测试集，每一次和上一次相关</span></span><br><span class="line">y_predict = np.zeros((n_test, n_repeat))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n_repeat):</span><br><span class="line">    estimator.fix(X_train[i], y_train[i])</span><br><span class="line">    y_predict[:, i] = estimator.predict(X_test)</span><br><span class="line">y_error = np.zeros(n_test)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n_repeat):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(n_repeat):</span><br><span class="line">        y_error += (y_test[:, j] - y_predict[:, i]) ** <span class="number">2</span>	<span class="comment"># MSE</span></span><br><span class="line">y_error /= (n_repeat * n_repeat)</span><br><span class="line">y_error = np.mean(y_error)</span><br><span class="line">y_noise = np.mean(np.var(y_test, axis=<span class="number">1</span>))</span><br><span class="line">y_bias = np.mean((f(X_test) - np.mean(y_predict, <span class="number">1</span>))**<span class="number">2</span>)</span><br><span class="line">print(<span class="string">"error:%4.4f, bias:%4.4f, noise:%4.4f"</span> % (y_error, y_bias, y_noise))</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error:0.0255, bias:0.0003, noise:0.0098</span><br></pre></td></tr></table></figure>
-
-<h2 id="梯度提升树-GBT"><a href="#梯度提升树-GBT" class="headerlink" title="梯度提升树(GBT)"></a>梯度提升树(GBT)</h2><p>在BT的基础上，GBT提供了<strong>损失函数为一般函数</strong>的解决方法</p>
-<p>利用一阶泰勒展开式，将损失函数进行替换$f(x+\Delta x) = f(x) + f’(x)\Delta x$, 由此等到新的损失函数:<br>$$<br>L(\hat{y}, f_n(\vec{x}))=L(\hat{y}, f_{n-1}(\vec{x}) + h_n(\vec{x}, \theta_n)) = L(\hat{y}, f_{n-1}(\vec{x}) + \frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\part f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n))\<br>\Delta L = L(\hat{y}, f_n(\vec{x})) - L(\hat{y}, f_{n-1}(\vec{x})) = \frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\partial f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n)\<br>h_n(\vec{x}, \theta_n) = -\frac{\partial L(\hat{y},f_{n-1}(\vec{x}))}{\partial f_{n-1}(\vec{x})}h_n(\vec{x};\theta_n)<br>$$<br>对于MSE函数，上述就是残差；对于其他函数，上述就是残差近似值.</p>
-<p>当前模型需要根据上一个模型的梯度方向进行优化。</p>
-<h3 id="梯度提升决策树-GBDT"><a href="#梯度提升决策树-GBDT" class="headerlink" title="梯度提升决策树(GBDT)"></a>梯度提升决策树(GBDT)</h3><p>对于分类模型，GBT采用决策树作为基本模型</p>
-<ul>
-<li>数据集：$D={(\vec{x_1}, \hat{y_1}), (\vec{x_2}, \hat{y_2}) \dots }$ </li>
-</ul>
-<ol>
-<li>初始化 $f_0(\vec{x})=arg min_\theta\sum_{i=1}^NL(\hat{y},\theta)$</li>
-<li>第n步<ol>
-<li>$r_{in} = \frac{\partial(\hat{y},f(x_i))}{\partial f(x_i)}$, 回归树以$r_{in}$作为目标，得到第n个树的节点区域$R_{n,j} j=1,2\dots J$</li>
-<li>对$j=1,2,\dots,J$每个区域计算输出：$\gamma_{n,j}=\arg\min_\gamma\sum_{\vec{x}\in R_{m,j}}L(\hat{y}, f_{m-1}(\vec{x})+\gamma)$</li>
-<li>更新$f_n(x)=f_{n-1}(\vec{x})+\sum_{j=1}^{J_n}\gamma_{jm}I$ ($\vec{x}\in R_{n,j}$)</li>
-</ol>
-</li>
-<li>输出最终决策树$\hat{f}(x) = f_M(x)$</li>
-</ol>
-<h3 id="梯度提升回归树-GBRT"><a href="#梯度提升回归树-GBRT" class="headerlink" title="梯度提升回归树(GBRT)"></a>梯度提升回归树(GBRT)</h3><p>对于回归模型，GBT采用回归树作为基本模型</p>
-<p>GBT中采用了<strong>随机梯度提升</strong>的方式，每一轮迭代中，新的决策树拟合的是原始训练集的一个子集的残差，引入随机性改进过拟合。</p>
-<h3 id="GBT于RF比较"><a href="#GBT于RF比较" class="headerlink" title="GBT于RF比较"></a>GBT于RF比较</h3><ul>
-<li>GBT为boosting模型，RF为bagging模型</li>
-<li>GBT采用弱分类器(高偏差，低方差)，中和每个弱分类器; RF采用完全成长的子决策树，子树间尽可能无关</li>
-<li>RT支持并行计算，每个子树独立计算；GBT采用更少的树可以取得更好的精度</li>
-</ul>
-<h2 id="Xgboost"><a href="#Xgboost" class="headerlink" title="Xgboost"></a>Xgboost</h2><p>通过结构风险最小化来确定下一个决策树的参数$\hat{\theta}<em>m=\arg\min</em>{\theta_m}\sum_{i=1}^NL(\hat{y_i}, f_m(\vec{x})+||h_m(\vec{x})||_p)$,其中$||h_m(\vec{x})||$为第m个决策树的正则化项。同时Xgboost使用二阶泰勒公式代替函数。</p>
-<p>其中正则化项为$||h_m(\vec{x})||=\gamma T + \frac{1}{2}\lambda\sum_{j=1}^Tw_j^2$.其中$T$为叶节点个数，$w_j$为每个节点的输出。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">cross-modal hashing</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">pytorch</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2020/03/14/%E6%8F%90%E5%8D%87%E6%96%B9%E6%B3%95--%E6%8F%90%E5%8D%87%E6%A0%91(boosting%20tree)/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2020/03/14/Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Redis分布式锁
-        
-      </div>
-    </a>
   
   
-    <a href="/2020/03/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">设计模式</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#提升树-BT"><span class="toc-number">1.</span> <span class="toc-text">提升树(BT)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#调用sklearn"><span class="toc-number">1.1.</span> <span class="toc-text">调用sklearn</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#梯度提升树-GBT"><span class="toc-number">2.</span> <span class="toc-text">梯度提升树(GBT)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#梯度提升决策树-GBDT"><span class="toc-number">2.1.</span> <span class="toc-text">梯度提升决策树(GBDT)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#梯度提升回归树-GBRT"><span class="toc-number">2.2.</span> <span class="toc-text">梯度提升回归树(GBRT)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GBT于RF比较"><span class="toc-number">2.3.</span> <span class="toc-text">GBT于RF比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Xgboost"><span class="toc-number">3.</span> <span class="toc-text">Xgboost</span></a></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
+    
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/archives/2020/03/">&amp;laquo; Prev</a><a class="page-number" href="/archives/2020/03/">1</a><span class="page-number current">2</span>
+    </nav>
   
 
 
@@ -374,8 +227,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
