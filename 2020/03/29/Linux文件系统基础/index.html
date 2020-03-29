@@ -6,16 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>Tag: cross-modal | 朽木自雕</title>
+  <title>Linux文件系统基础 | 朽木自雕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="朽木自雕">
-<meta property="og:url" content="http://blog.godder.top/tags/cross-modal/">
+  <meta name="description" content="Linux是由文件组成的操作系统 文件系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux文件系统基础">
+<meta property="og:url" content="http://blog.godder.top/2020/03/29/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/">
 <meta property="og:site_name" content="朽木自雕">
+<meta property="og:description" content="Linux是由文件组成的操作系统 文件系统">
 <meta property="og:locale" content="zh">
+<meta property="og:image" content="http://blog.godder.top/img/linux/filesystem.png">
+<meta property="og:image" content="https://www.ibm.com/developerworks/cn/linux/l-vfs/images/image002.gif">
+<meta property="og:image" content="https://www.ibm.com/developerworks/cn/linux/l-cn-hardandsymb-links/image001.jpg">
+<meta property="og:image" content="http://blog.godder.top/img/linux/ls-a.png">
+<meta property="og:image" content="https://www.ibm.com/developerworks/cn/linux/l-cn-hardandsymb-links/image002.jpg">
+<meta property="article:published_time" content="2020-03-29T15:36:35.339Z">
+<meta property="article:modified_time" content="2020-03-29T15:41:46.239Z">
 <meta property="article:author" content="Godder">
-<meta property="article:tag" content="blog">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.godder.top/img/linux/filesystem.png">
   
     <link rel="alternative" href="/atom.xml" title="朽木自雕" type="application/atom+xml">
   
@@ -139,148 +149,280 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Linux文件系统基础" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux文件系统基础
+    </h1>
+  
+
+        
+        <a href="/2020/03/29/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" class="archive-article-date">
+  	<time datetime="2020-03-29T15:36:35.339Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-29</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Linux是由文件组成的操作系统</p>
+<h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><p><img src="/img/linux/filesystem.png" alt=""></p>
+ <a id="more"></a>
+
+<ul>
+<li>Disk: 物理存储，包括硬盘、CD-ROM、USE、 NIC等</li>
+<li>Device Driver: 硬盘驱动，针对不同类型的硬盘提供不同的驱动(PATA, SATA, AHCI等)</li>
+<li>General Block Device: 通用块驱动，封装不同类型的硬盘驱动，提供统一的IO接口，全部按照块设备处理</li>
+<li>Filesystem: 文件系统，包括<ul>
+<li>磁盘文件系统：ext2, ext3, ext4, btrfs等</li>
+<li>网络文件系统：nfs, cifs等</li>
+<li>特殊文件系统：proc, sysfs, ramfs, tmpfs等</li>
+</ul>
+</li>
+<li>VFS: 虚拟文件系统，用来统一不同文件系统的API接口，为上层提供统一的的接口(mount/umount, open/close等操作)</li>
+<li>SCI: 系统调用接口，允许用户程序的I/O操作转换为内核的接口调用</li>
+<li>GNU C Library: POSIX标准运行库</li>
+</ul>
+<h4 id="VFS"><a href="#VFS" class="headerlink" title="VFS"></a>VFS</h4><p>虚拟文件系统作为Linux中的文件系统管理，其相关的数据结构定义在物理内存中，每当系统初始化时，Linux要在内存中构建一棵目录树(namespace)。</p>
+<p><img src="https://www.ibm.com/developerworks/cn/linux/l-vfs/images/image002.gif" alt=""></p>
+<h5 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h5><p>不同的文件系统需要挂载在指定的目录树下，这个过程称为文件系统的注册，Linux中每种文件系统用以下数据结构表示</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_system_type</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="keyword">int</span> fs_flags;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">super_block</span> *(*<span class="title">read_super</span>) (<span class="title">struct</span> <span class="title">super_block</span> *, <span class="title">void</span> *, <span class="title">int</span>);</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">module</span> *<span class="title">owner</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file_system_type</span> * <span class="title">next</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">fs_supers</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>注册的过程实际上是对各个文件系统的数据结构file_systems_type数据结构实例化，然后形成列表，在内核中通过一个全局变量file_systems指向表头。</p>
+<blockquote>
+<p>rootfs 根文件系统</p>
+</blockquote>
+<p>Linux在初始化中必须注册rootfs，其中包含了系统系统时所必须的目录和关键性文件，通过这些文件才可以使Linux挂载其他文件系统，具体包含了:</p>
+<ul>
+<li>init 进程的应用程序必须运行在rootfs上</li>
+<li>提供根目录 ”/“</li>
+<li>Linux挂载分区时的依赖信息存放于 rootfs 的 /etc/fstab中</li>
+<li>shell命令运行的程序必须在rootfs上，例如 ls, cd 等(/bin, /sbin 等目录下)</li>
+</ul>
+<p>Linux在挂载了rootfs后，在/mnt目录下再<strong>临时挂载</strong>其他文件系统，而rootfs也提供了如下Linux启动必须的目录：</p>
+<ul>
+<li>/etc/ :  存储配置文件</li>
+<li>/bin/ :  存储Linux系统开始和常用的执行文件</li>
+<li>/sbin/:  存储Linux系统开始时必须的系统执行文件</li>
+<li>/lib/   :  存储/bin/ 和 /sbin/ 中执行文件所需的链接库，和Linux内核模块</li>
+<li>/dev/  : 存储设备文件</li>
+</ul>
+<h5 id="基本对象"><a href="#基本对象" class="headerlink" title="基本对象"></a>基本对象</h5><ul>
+<li>superblock object: 存储已安装文件系统的相关信息和操作；</li>
+<li>inode object: 存储具体文件的相关信息和操作，内核通过该对象管理文件</li>
+<li>file object: Linux中一<strong>个已打开</strong>的文件的相关信息和操作</li>
+<li>dentry object: 存储目录与其相关文件进行关联的信息</li>
+</ul>
+<blockquote>
+<p>superblock object 超级块对象</p>
+</blockquote>
+<p>在Linux内核表示一个文件系统，包含了整个文件系统的信息，其数据结构定义在linux/fs.h中</p>
+<p><a href="https://elixir.bootlin.com/linux/latest/source/include/linux/fs.h" target="_blank" rel="noopener">https://elixir.bootlin.com/linux/latest/source/include/linux/fs.h</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">super_block</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span>	<span class="title">s_list</span>;</span>					<span class="comment">/* super blocks列表头(多个文件系统) */</span></span><br><span class="line">	<span class="keyword">dev_t</span>			s_dev;						<span class="comment">/* 搜索索引; _not_ kdev_t */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span>		s_blocksize_bits;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		s_blocksize;</span><br><span class="line">	<span class="keyword">loff_t</span>			s_maxbytes;					<span class="comment">/* 文件大小最大值 */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">file_system_type</span>	*<span class="title">s_type</span>;</span></span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">super_operations</span>	*<span class="title">s_op</span>;</span>		<span class="comment">/* 超级块对应操作 */</span></span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">dquot_operations</span>	*<span class="title">dq_op</span>;</span></span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">quotactl_ops</span>	*<span class="title">s_qcop</span>;</span></span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">export_operations</span> *<span class="title">s_export_op</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		s_flags;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		s_iflags;	<span class="comment">/* internal SB_I_* flags */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		s_magic;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dentry</span>		*<span class="title">s_root</span>;</span>	<span class="comment">/* 挂载的root */</span>	</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rw_semaphore</span>	<span class="title">s_umount</span>;</span></span><br><span class="line">	<span class="keyword">int</span>			s_count;</span><br><span class="line">	<span class="keyword">atomic_t</span>		s_active;</span><br><span class="line">    <span class="comment">// ... more</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 s_op中定义了相关的操作，包括了超级块挂载相关操作，inode相关操作等：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">super_operations</span> &#123;</span></span><br><span class="line">   	<span class="class"><span class="keyword">struct</span> <span class="title">inode</span> *(*<span class="title">alloc_inode</span>)(<span class="title">struct</span> <span class="title">super_block</span> *<span class="title">sb</span>);</span></span><br><span class="line">    <span class="comment">/** 与inode相关的操作 */</span></span><br><span class="line">	<span class="keyword">void</span> (*destroy_inode)(struct inode *);</span><br><span class="line">	<span class="keyword">void</span> (*free_inode)(struct inode *);</span><br><span class="line">   	<span class="keyword">void</span> (*dirty_inode) (struct inode *, <span class="keyword">int</span> flags);</span><br><span class="line">	<span class="keyword">int</span> (*write_inode) (struct inode *, struct writeback_control *wbc);</span><br><span class="line">	<span class="keyword">int</span> (*drop_inode) (struct inode *);</span><br><span class="line">	<span class="keyword">void</span> (*evict_inode) (struct inode *);</span><br><span class="line">    <span class="comment">/** 与挂载相关的操作 */</span></span><br><span class="line">	<span class="keyword">void</span> (*put_super) (struct super_block *);</span><br><span class="line">	<span class="keyword">int</span> (*sync_fs)(struct super_block *sb, <span class="keyword">int</span> wait);</span><br><span class="line">	<span class="keyword">int</span> (*freeze_super) (struct super_block *);</span><br><span class="line">	<span class="keyword">int</span> (*freeze_fs) (struct super_block *);</span><br><span class="line">	<span class="keyword">int</span> (*thaw_super) (struct super_block *);</span><br><span class="line">	<span class="keyword">int</span> (*unfreeze_fs) (struct super_block *);</span><br><span class="line">	<span class="keyword">int</span> (*statfs) (struct dentry *, struct kstatfs *);</span><br><span class="line">	<span class="keyword">int</span> (*remount_fs) (struct super_block *, <span class="keyword">int</span> *, <span class="keyword">char</span> *);</span><br><span class="line">	<span class="keyword">void</span> (*umount_begin) (struct super_block *);</span><br><span class="line">	<span class="comment">/** 其他操作 */</span></span><br><span class="line">	<span class="keyword">int</span> (*show_options)(struct seq_file *, struct dentry *);</span><br><span class="line">	<span class="keyword">int</span> (*show_devname)(struct seq_file *, struct dentry *);</span><br><span class="line">	<span class="keyword">int</span> (*show_path)(struct seq_file *, struct dentry *);</span><br><span class="line">	<span class="keyword">int</span> (*show_stats)(struct seq_file *, struct dentry *);</span><br><span class="line">    <span class="keyword">int</span> (*bdev_try_to_free_page)(struct super_block*, struct page*, <span class="keyword">gfp_t</span>);</span><br><span class="line">	<span class="keyword">long</span> (*nr_cached_objects)(struct super_block *,</span><br><span class="line">				  struct shrink_control *);</span><br><span class="line">	<span class="keyword">long</span> (*free_cached_objects)(struct super_block *,</span><br><span class="line">				    struct shrink_control *);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过sb-&gt;s_op_remount_fs实现重新挂载</p>
+<blockquote>
+<p>inode object </p>
+</blockquote>
+<p>文件系统的文件信息存放在其中，每当一个文件创建时，对应的inode结构也被创建，数据结构如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">inode</span> &#123;</span></span><br><span class="line">	<span class="keyword">umode_t</span>			i_mode;</span><br><span class="line">	<span class="keyword">unsigned</span> short		i_opflags;</span><br><span class="line">	<span class="keyword">kuid_t</span>			i_uid;</span><br><span class="line">	<span class="keyword">kgid_t</span>			i_gid;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span>		i_flags;</span><br><span class="line">    <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">inode_operations</span>	*<span class="title">i_op</span>;</span>	<span class="comment">/* 相关操作 */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">super_block</span>	*<span class="title">i_sb</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">address_space</span>	*<span class="title">i_mapping</span>;</span></span><br><span class="line">    <span class="comment">/* Stat data, not accessed from path walking */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		i_ino;			<span class="comment">/* 索引节点号 */</span>		</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Filesystems may only read i_nlink directly.  They shall use the</span></span><br><span class="line"><span class="comment">	 * following functions for modification:</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 *    (set|clear|inc|drop)_nlink</span></span><br><span class="line"><span class="comment">	 *    inode_(inc|dec)_link_count</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">union</span> &#123;</span><br><span class="line">		<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> i_nlink;</span><br><span class="line">		<span class="keyword">unsigned</span> <span class="keyword">int</span> __i_nlink;	</span><br><span class="line">	&#125;;									<span class="comment">/* 硬链接数目 */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span>	<span class="title">i_lru</span>;</span>			<span class="comment">/* inode LRU list */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span>	<span class="title">i_sb_list</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span>	<span class="title">i_wb_list</span>;</span>		<span class="comment">/* backing dev writeback list */</span></span><br><span class="line">	<span class="keyword">union</span> &#123;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">hlist_head</span>	<span class="title">i_dentry</span>;</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">rcu_head</span>		<span class="title">i_rcu</span>;</span></span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="keyword">atomic64_t</span>		i_version;</span><br><span class="line">	<span class="keyword">atomic64_t</span>		i_sequence; <span class="comment">/* see futex */</span></span><br><span class="line">    <span class="keyword">atomic_t</span>		i_count;			<span class="comment">/* 引用计数器 */</span></span><br><span class="line">	<span class="keyword">atomic_t</span>		i_dio_count;</span><br><span class="line">	<span class="keyword">atomic_t</span>		i_writecount;</span><br><span class="line">    <span class="comment">// ... more</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>file object</p>
+</blockquote>
+<p>file结构体用来表示<strong>在进程中打开的</strong>一个文件，其数据结构定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file</span> &#123;</span></span><br><span class="line">	<span class="keyword">union</span> &#123;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">llist_node</span>	<span class="title">fu_llist</span>;</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">rcu_head</span> 	<span class="title">fu_rcuhead</span>;</span></span><br><span class="line">	&#125; f_u;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">path</span>		<span class="title">f_path</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">inode</span>		*<span class="title">f_inode</span>;</span>	<span class="comment">/* 文件的inode */</span></span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span>	*<span class="title">f_op</span>;</span>		<span class="comment">/* 对应的操作 */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Protects f_ep_links, f_flags.</span></span><br><span class="line"><span class="comment">	 * Must not be taken from IRQ context.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">spinlock_t</span>		f_lock;</span><br><span class="line">	<span class="keyword">enum</span> rw_hint		f_write_hint;</span><br><span class="line">	<span class="keyword">atomic_long_t</span>		f_count;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> 		f_flags;</span><br><span class="line">	<span class="keyword">fmode_t</span>			f_mode;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">mutex</span>		<span class="title">f_pos_lock</span>;</span></span><br><span class="line">	<span class="keyword">loff_t</span>			f_pos;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">fown_struct</span>	<span class="title">f_owner</span>;</span></span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span>	*<span class="title">f_cred</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">file_ra_state</span>	<span class="title">f_ra</span>;</span></span><br><span class="line">    <span class="comment">/* needed for tty driver, and maybe others */</span></span><br><span class="line">	<span class="keyword">void</span>			*private_data;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">address_space</span>	*<span class="title">f_mapping</span>;</span></span><br><span class="line">	<span class="keyword">errseq_t</span>		f_wb_err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>dentry object</p>
+</blockquote>
+<p>VFS将目录看作是由若干子目录和文件组成的<strong>普通文件</strong>，当目录读入内存则转化为dentry数据结构</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">dentry</span> &#123;</span></span><br><span class="line">	<span class="comment">/* RCU lookup touched fields */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> d_flags;			<span class="comment">/* protected by d_lock */</span></span><br><span class="line">	<span class="keyword">seqcount_t</span> d_seq;				<span class="comment">/* per dentry seqlock */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">hlist_bl_node</span> <span class="title">d_hash</span>;</span>	<span class="comment">/* lookup hash list */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">dentry</span> *<span class="title">d_parent</span>;</span>		<span class="comment">/* parent directory */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">qstr</span> <span class="title">d_name</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">inode</span> *<span class="title">d_inode</span>;</span>		<span class="comment">/* Where the name belongs to - NULL is negative */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> d_iname[DNAME_INLINE_LEN];	<span class="comment">/* small names */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Ref lookup also touches following */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">lockref</span> <span class="title">d_lockref</span>;</span>	<span class="comment">/* per-dentry lock and refcount */</span></span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">dentry_operations</span> *<span class="title">d_op</span>;</span>	<span class="comment">/* 对应的操作 */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">super_block</span> *<span class="title">d_sb</span>;</span>	<span class="comment">/* The root of the dentry tree */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> d_time;		<span class="comment">/* used by d_revalidate */</span></span><br><span class="line">	<span class="keyword">void</span> *d_fsdata;			<span class="comment">/* fs-specific data */</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">union</span> &#123;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">d_lru</span>;</span>		<span class="comment">/* LRU list */</span></span><br><span class="line">		<span class="keyword">wait_queue_head_t</span> *d_wait;	<span class="comment">/* in-lookup ones only */</span></span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">d_child</span>;</span>	<span class="comment">/* child of parent list */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">d_subdirs</span>;</span>	<span class="comment">/* our children */</span></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * d_alias and d_rcu can share memory</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">union</span> &#123;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">hlist_node</span> <span class="title">d_alias</span>;</span>	<span class="comment">/* inode alias list */</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">hlist_bl_node</span> <span class="title">d_in_lookup_hash</span>;</span>	<span class="comment">/* only for in-lookup ones */</span></span><br><span class="line">	 	<span class="class"><span class="keyword">struct</span> <span class="title">rcu_head</span> <span class="title">d_rcu</span>;</span></span><br><span class="line">	&#125; d_u;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="文件的组成"><a href="#文件的组成" class="headerlink" title="文件的组成"></a>文件的组成</h3><p>文件分为文件名和数据，在linux上被分为：用户数据(user data) 和 元数据(metadata)</p>
+<ul>
+<li>用户数据： 文件数据块，记录文件真实内容</li>
+<li>元数据    ： 文件附加属性，如创建时间、文件大小、inode号(索引节点号)等。<pre><code>inode是元数据的一部分但不包含文件名，是文件的唯一标识符。</code></pre></li>
+</ul>
+<p><img src="https://www.ibm.com/developerworks/cn/linux/l-cn-hardandsymb-links/image001.jpg" alt=""></p>
+<p>可以通过ls -i命令查看文件的inode号：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&gt; ls -i</span><br><span class="line">    3 console  38458 fd    35773 mqueue  38457 ptmx  38452 random  38461 stderr  38460 stdout  38456 urandom 38462 core     38453 full  38451 null        1 pts   38449 shm     38459 stdin   38454 tty     38455 zero</span><br></pre></td></tr></table></figure>
+
+<p><strong>每个文件系统内都有唯一的inode号，不同文件系统之间inode号不唯一</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$&gt; df -i</span><br><span class="line">Filesystem      Inodes IUsed   IFree IUse% Mounted on</span><br><span class="line">overlay        3907584 86100 3821484    3% /</span><br><span class="line">tmpfs           254627    17  254610    1% /dev</span><br><span class="line">tmpfs           254627    15  254612    1% /sys/fs/cgroup</span><br><span class="line">shm             254627     1  254626    1% /dev/shm</span><br><span class="line">/dev/sda1      3907584 86100 3821484    3% /etc/hosts</span><br><span class="line">tmpfs           254627     1  254626    1% /proc/acpi</span><br><span class="line">tmpfs           254627     1  254626    1% /sys/firmware</span><br></pre></td></tr></table></figure>
+
+<p>通过df命令查看所挂载的文件系统情况，每个文件系统之间的inode号不唯一</p>
+<h3 id="文件类型"><a href="#文件类型" class="headerlink" title="文件类型"></a>文件类型</h3><p>通过ls -l 或 ll命令获取当前目录下的文件元数据信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$&gt; ls -l</span><br><span class="line">crw--w---- 1 root tty  136, 0 Mar 26 10:15 console</span><br><span class="line">lrwxrwxrwx 1 root root     11 Mar 26 10:15 core -&gt; /proc/kcore</span><br><span class="line">lrwxrwxrwx 1 root root     13 Mar 26 10:15 fd -&gt; /proc/self/fd</span><br><span class="line">crw-rw-rw- 1 root root   1, 7 Mar 26 10:15 full</span><br><span class="line">drwxrwxrwt 2 root root     40 Mar 26 10:15 mqueue</span><br><span class="line">crw-rw-rw- 1 root root   1, 3 Mar 26 10:15 null</span><br><span class="line">lrwxrwxrwx 1 root root      8 Mar 26 10:15 ptmx -&gt; pts/ptmx</span><br><span class="line">drwxr-xr-x 2 root root      0 Mar 26 10:15 pts</span><br><span class="line">crw-rw-rw- 1 root root   1, 8 Mar 26 10:15 random</span><br><span class="line">drwxrwxrwt 2 root root     40 Mar 26 10:15 shm</span><br><span class="line">lrwxrwxrwx 1 root root     15 Mar 26 10:15 stderr -&gt; /proc/self/fd/2</span><br><span class="line">lrwxrwxrwx 1 root root     15 Mar 26 10:15 stdin -&gt; /proc/self/fd/0</span><br><span class="line">lrwxrwxrwx 1 root root     15 Mar 26 10:15 stdout -&gt; /proc/self/fd/1</span><br><span class="line">crw-rw-rw- 1 root root   5, 0 Mar 26 10:15 tty</span><br><span class="line">crw-rw-rw- 1 root root   1, 9 Mar 26 10:15 urandom</span><br><span class="line">crw-rw-rw- 1 root root   1, 5 Mar 26 10:15 zero</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：文件描述，硬连接数，所有者， 所属组， 占用存储空间， 文件最后修改时间， 名称</p>
+<p><img src="/img/linux/ls-a.png" alt=""></p>
+<p>其中d表示文件类型，包括：</p>
+<ul>
+<li>[-]  普通文件： eg.main.c</li>
+<li>[d] 目录文件：在Linux中看作若干子目录+文件</li>
+<li>[l]  连接符号:  (软链接)连接文件可以理解为windows下的快捷方式</li>
+<li>[b] 块设备: 具有一定结构的随机存取设备，程序可自行确定读取的位置，读写按照固定大小</li>
+<li>[c]  字符设备: 具有一定结构的随机存取设备，读写按字符进行，连续形成字符流</li>
+<li>[s]  socket文件: 进程产生的socket文件，通过向socket文件读写实现消息传递</li>
+<li>[p]  管道: 在磁盘中没有映像，只存在于内存，用于俩个文件之间的通讯，属于pipfs</li>
+</ul>
+<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><h5 id="硬链接"><a href="#硬链接" class="headerlink" title="硬链接"></a>硬链接</h5><p>一个inode号对应多个文件名，即同一个文件使用多个名字，通过link oldfile newfile 或 ln命令创建硬链接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$&gt; touch <span class="built_in">test</span>-link.c</span><br><span class="line">$&gt; ls -i</span><br><span class="line">792177 <span class="built_in">test</span>-link.c</span><br><span class="line">$&gt; ln <span class="built_in">test</span>-link.c <span class="built_in">test</span>-link-link</span><br><span class="line">$&gt; ln <span class="built_in">test</span>-link-link <span class="built_in">test</span>-link-link-link</span><br><span class="line">$&gt; ls -i</span><br><span class="line">792177 <span class="built_in">test</span>-link-link  792177 <span class="built_in">test</span>-link-link-link  792177 <span class="built_in">test</span>-link.c</span><br></pre></td></tr></table></figure>
+
+<p>硬链接有如下特点：</p>
+<ol>
+<li>所有创建的连接文件和源文件拥有相同的inode号和数据块(源文件修改全部修改)，连接文件删除不影响其他</li>
+<li>只能对已存在文件创建，不可对目录创建</li>
+<li>不可对不同系统下的文件交叉创建(在系统A中创系统B中文件的连接)</li>
+</ol>
+<h5 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h5><p>文件内容存放者其他文件的路径信息，软连接就是一个一般文件，有独立的inode和数据块。可通过ln -s创建</p>
+<p><img src="https://www.ibm.com/developerworks/cn/linux/l-cn-hardandsymb-links/image002.jpg" alt=""></p>
+<h4 id="设备"><a href="#设备" class="headerlink" title="设备"></a>设备</h4><p>块设备和字符设备统称为设备驱动，同样驱动也是文件，其中包含了字符设备、块设备、网络设备</p>
+<ul>
+<li>字符设备： 面向字符的数据交换，<strong>数据传输量低</strong>，不具备缓冲区，数据以流的形式存在，实时读写(用于终端、键盘等设备)</li>
+<li>块设备：每次读取都是按照固定大小读取，用缓存区来存储暂时数据，然后刷新缓冲区一次性写入或读取</li>
+<li>网络设备：用于管理系统中的网卡(物理/虚拟)，处理网口上的数据收发，并通过协议栈为连接其他网口提供统一API，网络设备在/dev/目录下有对应的设备文件</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/19/Cycle-Consistent%20Deep%20Generative%20Hashing%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-18T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/19/Cycle-Consistent%20Deep%20Generative%20Hashing%20for%20Cross-Modal%20Retrieval/">Cycle-Consistent Deep Generative Hashing for Cross-Modal Retrieval</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2020/03/29/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-14T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-15</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/03/24/MySql%E5%9F%BA%E7%A1%80/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MySql基础</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/15/Self-Supervised%20Adversarial%20Hashing%20Networks%20for%20Cross-Modal%20Retrieval/">Self-Supervised Adversarial Hashing Networks for Cross-Modal Retrieval</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#文件系统"><span class="toc-number">1.</span> <span class="toc-text">文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#VFS"><span class="toc-number">1.1.</span> <span class="toc-text">VFS</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#注册"><span class="toc-number">1.1.1.</span> <span class="toc-text">注册</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#基本对象"><span class="toc-number">1.1.2.</span> <span class="toc-text">基本对象</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件的组成"><span class="toc-number">2.</span> <span class="toc-text">文件的组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#文件类型"><span class="toc-number">3.</span> <span class="toc-text">文件类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#连接"><span class="toc-number">3.1.</span> <span class="toc-text">连接</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#硬链接"><span class="toc-number">3.1.1.</span> <span class="toc-text">硬链接</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#软连接"><span class="toc-number">3.1.2.</span> <span class="toc-text">软连接</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#设备"><span class="toc-number">3.2.</span> <span class="toc-text">设备</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-05T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-06</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/">Triplet-Based Deep Hashing Network for Cross-Modal Retrieval</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">cross-modal</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -303,9 +445,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
@@ -390,47 +532,7 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">web</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">集群配置</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">deep learning</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">cross-modal</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -442,6 +544,34 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">虚拟化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络基础</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">spring cloud</a>
               </li>
              
@@ -450,11 +580,23 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">nio</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">集群配置</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">re-id</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">web</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">nio</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -466,7 +608,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络基础</a>
+                <a href="javascript:void(0)" class="js-tag color1">web安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -474,15 +620,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">web安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
             
             <div class="clearfix"></div>
