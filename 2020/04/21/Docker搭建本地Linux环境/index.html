@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>Tag: 虚拟化 | 朽木自雕</title>
+  <title>Docker搭建本地Linux环境 | 朽木自雕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="朽木自雕">
-<meta property="og:url" content="http://blog.godder.top/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/">
+  <meta name="description" content="dockerhub连接：https:&#x2F;&#x2F;hub.docker.com&#x2F;repository&#x2F;docker&#x2F;godderwang&#x2F;local-remote-compile 下载即用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker搭建本地Linux环境">
+<meta property="og:url" content="http://blog.godder.top/2020/04/21/Docker%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0Linux%E7%8E%AF%E5%A2%83/">
 <meta property="og:site_name" content="朽木自雕">
+<meta property="og:description" content="dockerhub连接：https:&#x2F;&#x2F;hub.docker.com&#x2F;repository&#x2F;docker&#x2F;godderwang&#x2F;local-remote-compile 下载即用">
 <meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2020-04-21T10:07:32.145Z">
+<meta property="article:modified_time" content="2020-04-21T10:18:35.334Z">
 <meta property="article:author" content="Godder">
-<meta property="article:tag" content="blog">
+<meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="朽木自雕" type="application/atom+xml">
@@ -139,36 +143,65 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Docker搭建本地Linux环境" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/23/Docker%E5%9F%BA%E7%A1%80/" class="archive-article-date">
-  	<time datetime="2020-03-23T14:32:10.468Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-23</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/23/Docker%E5%9F%BA%E7%A1%80/">Docker基础</a>
+    <h1 class="article-title" itemprop="name">
+      Docker搭建本地Linux环境
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/04/21/Docker%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0Linux%E7%8E%AF%E5%A2%83/" class="archive-article-date">
+  	<time datetime="2020-04-21T10:07:32.145Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>dockerhub连接：<a href="https://hub.docker.com/repository/docker/godderwang/local-remote-compile" target="_blank" rel="noopener">https://hub.docker.com/repository/docker/godderwang/local-remote-compile</a></p>
+<p>下载即用</p>
+<a id="more"></a>
+<h2 id="获取基本镜像"><a href="#获取基本镜像" class="headerlink" title="获取基本镜像"></a>获取基本镜像</h2><p>从dockerhub获取ubuntu的镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull ubuntu</span><br></pre></td></tr></table></figure>
+
+<h2 id="生成工具镜像"><a href="#生成工具镜像" class="headerlink" title="生成工具镜像"></a>生成工具镜像</h2><p>我们创建一个Dockerfile来在原有的ubuntu基础上封装自己需要的工具</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt-get update &amp;&amp; apt install -y net-tools iputils-ping vim telnet ssh zip unzip tree git htop axel cloc &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">"root:root"</span> | chpasswd</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> service ssh start &amp;&amp; /bin/bash</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">22</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">21</span></span><br></pre></td></tr></table></figure>
+
+<p>然后我们构建镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t ubuntu-dev .</span><br></pre></td></tr></table></figure>
+
+<h2 id="生成编译环境镜像"><a href="#生成编译环境镜像" class="headerlink" title="生成编译环境镜像"></a>生成编译环境镜像</h2><p>基于刚刚创建的镜像，在上面进行编译器的安装，以cpp环境为例</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu-dev</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apt update &amp;&amp; apt install -y g++ make libboost-all-dev cmake gdb git cppman</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> service ssh start &amp;&amp; /bin/bash</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">21</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">22</span></span><br></pre></td></tr></table></figure>
+
+<p>同样按照之前的命令生成镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t ubuntu-cc</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置SSH"><a href="#配置SSH" class="headerlink" title="配置SSH"></a>配置SSH</h2><p>在刚刚配置好的ubuntu-cc镜像中创建一个镜像实例，修改里面的ssh配置</p>
+<p>修改/etc/ssh/sshd_config文件中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes</span><br></pre></td></tr></table></figure>
+
+<p>配置登录密码作为root的ssh密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+
+<p>将该容器保存成镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker commit &lt;contain name&gt;</span><br><span class="line">docker tag &lt;image id&gt; ubuntu-cc-ssh</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name=&lt;container name&gt; -p &lt;<span class="built_in">local</span> port&gt;:22 ubuntu-cc-ssh</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以通过clion或VSC实现远程编译</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -176,31 +209,132 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">docker</a>
         		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">虚拟化</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2020/04/21/Docker%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0Linux%E7%8E%AF%E5%A2%83/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/04/21/C++%E7%AC%94%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          C++学习笔记
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2020/04/01/Linux%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">进程间通信</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取基本镜像"><span class="toc-number">1.</span> <span class="toc-text">获取基本镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成工具镜像"><span class="toc-number">2.</span> <span class="toc-text">生成工具镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成编译环境镜像"><span class="toc-number">3.</span> <span class="toc-text">生成编译环境镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置SSH"><span class="toc-number">4.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-number">5.</span> <span class="toc-text">使用</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -223,9 +357,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
