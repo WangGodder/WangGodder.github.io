@@ -6,20 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>Triplet-Based Deep Hashing Network for Cross-Modal Retrieval | 朽木自雕</title>
+  <title>Tag: protobuf | 朽木自雕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="from IEEE 2018abstract本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Triplet-Based Deep Hashing Network for Cross-Modal Retrieval">
-<meta property="og:url" content="http://blog.godder.top/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="朽木自雕">
+<meta property="og:url" content="http://blog.godder.top/tags/protobuf/">
 <meta property="og:site_name" content="朽木自雕">
-<meta property="og:description" content="from IEEE 2018abstract本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。">
 <meta property="og:locale" content="zh">
-<meta property="article:published_time" content="2019-04-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-03-29T15:39:56.442Z">
 <meta property="article:author" content="Godder">
-<meta property="article:tag" content="deep learning">
-<meta property="article:tag" content="cross-modal hashing">
+<meta property="article:tag" content="blog">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="朽木自雕" type="application/atom+xml">
@@ -148,191 +143,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Triplet-Based Deep Hashing Network for Cross-Modal Retrieval" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      Triplet-Based Deep Hashing Network for Cross-Modal Retrieval
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2020/04/23/ProtoBuf/" class="archive-article-date">
+  	<time datetime="2020-04-23T06:51:53.871Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-23</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2020/04/23/ProtoBuf/">ProtoBuf简述</a>
     </h1>
   
 
-        
-        <a href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-05T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="from-IEEE-2018"><a href="#from-IEEE-2018" class="headerlink" title="from IEEE 2018"></a>from IEEE 2018</h3><h5 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h5><p>本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。<br>本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。</p>
-<a id="more"></a>
-<h5 id="network-and-loss"><a href="#network-and-loss" class="headerlink" title="network and loss"></a>network and loss</h5><h6 id="1-network-architecture"><a href="#1-network-architecture" class="headerlink" title="1.network architecture"></a>1.network architecture</h6><p>对于图像的hash提取网络，本文采用了CNN-F，仅对最后一层修改为hash code的提取层，网络结构如下<br>![CNN-F](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 1.jpg)<br>上图中 “LRN” 表示是否使用了 Local Response Normalization 即是否使用正则化处理输出结果，pool为MaxPooling</p>
-<p>对于文本的特征提取，则采用了非常简单的多层感知机模型，同样输出层由hash code提取层替换<br>![MLP](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 2.jpg)</p>
-<h6 id="2-loss"><a href="#2-loss" class="headerlink" title="2.loss"></a>2.loss</h6><p>每次进行实例选取时，会选取3个对象：positive, negative, query，其中query于positive相对于negative更加接近。这样就有了在Face net中于triplet loss相似的本文triplet label likelihood公式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 3.jpg)<br>其中F表示图像提取出的hash code，G表示文本提取出的hash code.<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 4.jpg)<br>这里α为需要调试的hyper-parameter.</p>
-<p>本文中将loss分成3个部分，分别为inter-modal triplet loss, intra-modal triplet loss, graph regularization loss</p>
-<h6 id="inter-modal-triplet-loss"><a href="#inter-modal-triplet-loss" class="headerlink" title="inter-modal triplet loss"></a>inter-modal triplet loss</h6><p>用来区分同一类的不同模态之间的hash code的距离，即用来区分同一类内图像和文本之间的距离。<br>其中，Image to Text 的 inter-modal triplet loss 表示为：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 5.jpg)<br>Text to Image 的 inter-modal triplet loss 表示为：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 6.jpg)<br>这里通过将query对象选取与positive对象同类但不同形态的对象，通过loss的减少来缩短同类型下不同模态对象之间的hash code的hamming distance，同时增加不同类型之间不同模态对象的距离<br>最后 得到的inter-modal triplet loss = J<del>1</del> + J <del>2</del> </p>
-<h6 id="intra-modal-triplet-loss"><a href="#intra-modal-triplet-loss" class="headerlink" title="intra-modal triplet loss"></a>intra-modal triplet loss</h6><p>用来区分同一模态下对象之间的分类距离。<br>其中对于图像类型的对象采用如下计算方式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 7.jpg)<br>对于文本类型对象采用如下计算方式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 8.jpg)<br>最后得到intra-modal triplet loss = J<del>3</del> + J<del>4</del></p>
-<h6 id="graph-regularization-loss"><a href="#graph-regularization-loss" class="headerlink" title="graph regularization loss"></a>graph regularization loss</h6><p>通过图谱的之间的距离分类，对得到的hash code进行无监督分类</p>
-<p>这里B^x^ B^y^ 分别是从文本模态和图像模态得出的hash code，||A||<del>F</del> 表示矩阵A的Frobenius norm，计算如下：<br>$$<br>||A||<em>F = \sqrt{\sum</em>{i=1}^m\sum_{j=1}^n|a_{i,j}|^2} = \sqrt{tr(A^HA)} \<br>其中A^H为A的共轭矩阵<br>$$<br>L为B的拉普拉斯矩阵（L = D - S 度矩阵 - 邻接矩阵）,γ、η、β为用来平衡的参数，文中并没给出训练时的取值，但给出在验证集上的的取值依次为100，50，1<br>对于图谱的学习过程，可由下式表出：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 10.jpg)</p>
-<p>上述三种loss可以理解为：不同模态之间的距离，同模态之间的距离，得出hash code的聚类距离<br>于是得到我们的目标函数<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 11.jpg)<br>其中B是聚类的hash code， w<del>x</del> 为text模态的权重，w<del>y</del> 为image模态的权重</p>
-<h5 id="3-training"><a href="#3-training" class="headerlink" title="3.training"></a>3.training</h5><p>对于三个目标的优化，本文采用固定两个，优化一个的方式。训练方式如下：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 12.jpg)<br>这里标出了query对象的选取方式，对于每个batch，先对CNN-F进行训练，然后训练MPL模型</p>
-<h6 id="updating-B"><a href="#updating-B" class="headerlink" title="updating B"></a>updating B</h6><p>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 13.jpg)<br>当CNN-F和MPL的参数确定后，就可以用来更新B的输出，此时loss只有graph regularization loss在起作用，这里sign(x) = 1 if x &gt;= 0 else 0<br>identity matrix 为 单位矩阵</p>
-<h6 id="updating-wx"><a href="#updating-wx" class="headerlink" title="updating wx"></a>updating w<del>x</del></h6><p>当B确定的时候，我们按照训练过程，我们首先更新w<del>x</del>的值，通过SGD优化器进行BP优化参数。<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 14.jpg)</p>
-<h6 id="updating-wy"><a href="#updating-wy" class="headerlink" title="updating wy"></a>updating w<del>y</del></h6><p>这里和上述类似，公式如下：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 15.jpg)</p>
-<h6 id="triplet-sample"><a href="#triplet-sample" class="headerlink" title="triplet sample"></a>triplet sample</h6><p>对于每次迭代如何选取query对象，这里给出了明确说明。<br>在每次随机选取P个 anchor，然后随机选取M1个正样本和M2个负样本，保证anchor到正样本的距离比到负样本距离短。这样就获得了P * M1 * M2个triplet sample</p>
-<h5 id="performance"><a href="#performance" class="headerlink" title="performance"></a>performance</h5><p>本文对于该方法的表现，发现文本任务的结果比图像任务的结果更好，认为图像中包含的语义较文本更少。</p>
-<h5 id="improve"><a href="#improve" class="headerlink" title="improve"></a>improve</h5><p>个人认为，本文对于图像的特征提取网络模型过于简单，导致认为图像中的语义包含较少，同时对于MPL不能很好的检测出文本的语义时间序列关系。</p>
-<p>由于CNN的特性，导致特征提取的空间关系较弱，建议采用更深的网络结构，同时融合不同感受野下的特征，增强特征空间关系，同时对于深层特征能够跟好的提取。另外应该抛弃全连接层，转而用1×1的卷积来代替，这样能够减少训练耗时。</p>
-<p>对于MPL，本文中的模型虽然较CNN-F能够提取出较多的特征，但由于文本的特性，其特征简单易提取，但MPL有可能忽略的文本中上下文关系，建议采用LSTM结构，对文本特征进行上下文的特征结合，获取更精确的特征。<br>关于Text的特征提取，建议参考《Cross-Modal Scene Networks》 IEEE 2018</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">cross-modal hashing</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">protobuf</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Multi-Level Factorisation Net for Person Re-Identification
-        
-      </div>
-    </a>
   
   
-    <a href="/2018/11/21/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86----%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">图像处理----图像金字塔</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-        <div class="toc-container tooltip-left">
-            <i class="icon-font icon-category"></i>
-            <div class="tooltip tooltip-east">
-                <span class="tooltip-item">
-                </span>
-                <span class="tooltip-content">
-                    <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#from-IEEE-2018"><span class="toc-number">1.</span> <span class="toc-text">from IEEE 2018</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#abstract"><span class="toc-number">1.0.1.</span> <span class="toc-text">abstract</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#network-and-loss"><span class="toc-number">1.0.2.</span> <span class="toc-text">network and loss</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-network-architecture"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">1.network architecture</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-loss"><span class="toc-number">1.0.2.2.</span> <span class="toc-text">2.loss</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#inter-modal-triplet-loss"><span class="toc-number">1.0.2.3.</span> <span class="toc-text">inter-modal triplet loss</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#intra-modal-triplet-loss"><span class="toc-number">1.0.2.4.</span> <span class="toc-text">intra-modal triplet loss</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#graph-regularization-loss"><span class="toc-number">1.0.2.5.</span> <span class="toc-text">graph regularization loss</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-training"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.training</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#updating-B"><span class="toc-number">1.0.3.1.</span> <span class="toc-text">updating B</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#updating-wx"><span class="toc-number">1.0.3.2.</span> <span class="toc-text">updating wx</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#updating-wy"><span class="toc-number">1.0.3.3.</span> <span class="toc-text">updating wy</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#triplet-sample"><span class="toc-number">1.0.3.4.</span> <span class="toc-text">triplet sample</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#performance"><span class="toc-number">1.0.4.</span> <span class="toc-text">performance</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#improve"><span class="toc-number">1.0.5.</span> <span class="toc-text">improve</span></a></li></ol></li></ol></li></ol>
-                    </div>
-                </span>
-            </div>
-        </div>
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -355,9 +219,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,

@@ -6,21 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://blog.godder.top">
-  <title>Triplet-Based Deep Hashing Network for Cross-Modal Retrieval | 朽木自雕</title>
+  <title>ProtoBuf简述 | 朽木自雕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="from IEEE 2018abstract本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。">
+  <meta name="description" content="Protobuf(protocol buffer)是Google的结构化数据的数据存放格式(类似于XML, Json)，优点如下：  序列化体积小，只需要XML的$\frac{1}{10}- \frac{1}{3}$ 解析速度快 多语言支持  ProtoBuf描述执行过程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Triplet-Based Deep Hashing Network for Cross-Modal Retrieval">
-<meta property="og:url" content="http://blog.godder.top/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/">
+<meta property="og:title" content="ProtoBuf简述">
+<meta property="og:url" content="http://blog.godder.top/2020/04/23/ProtoBuf/">
 <meta property="og:site_name" content="朽木自雕">
-<meta property="og:description" content="from IEEE 2018abstract本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。">
+<meta property="og:description" content="Protobuf(protocol buffer)是Google的结构化数据的数据存放格式(类似于XML, Json)，优点如下：  序列化体积小，只需要XML的$\frac{1}{10}- \frac{1}{3}$ 解析速度快 多语言支持  ProtoBuf描述执行过程">
 <meta property="og:locale" content="zh">
-<meta property="article:published_time" content="2019-04-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-03-29T15:39:56.442Z">
+<meta property="og:image" content="http://blog.godder.top/img/protobuf/using-flowchart.png">
+<meta property="og:image" content="http://blog.godder.top/img/protobuf/error_code.png">
+<meta property="og:image" content="http://blog.godder.top/img/protobuf/result.png">
+<meta property="og:image" content="http://blog.godder.top/img/protobuf/message_type.png">
+<meta property="article:published_time" content="2020-04-23T06:51:53.871Z">
+<meta property="article:modified_time" content="2020-04-23T06:53:16.309Z">
 <meta property="article:author" content="Godder">
-<meta property="article:tag" content="deep learning">
-<meta property="article:tag" content="cross-modal hashing">
+<meta property="article:tag" content="protobuf">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.godder.top/img/protobuf/using-flowchart.png">
   
     <link rel="alternative" href="/atom.xml" title="朽木自雕" type="application/atom+xml">
   
@@ -148,46 +152,182 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Triplet-Based Deep Hashing Network for Cross-Modal Retrieval" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-ProtoBuf" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Triplet-Based Deep Hashing Network for Cross-Modal Retrieval
+      ProtoBuf简述
     </h1>
   
 
         
-        <a href="/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" class="archive-article-date">
-  	<time datetime="2019-04-05T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-06</time>
+        <a href="/2020/04/23/ProtoBuf/" class="archive-article-date">
+  	<time datetime="2020-04-23T06:51:53.871Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="from-IEEE-2018"><a href="#from-IEEE-2018" class="headerlink" title="from IEEE 2018"></a>from IEEE 2018</h3><h5 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h5><p>本文通过对图像和文本采用不同的方式提取hash，通过hash对多模态对象进行分类的一种方法。<br>本文提出了通过query对象来提高损失函数的回归效率，类似于face net中的triplet loss；同时对于hash之间的hamming distance利用谱图回归的方式进行进一步聚类。</p>
+        <p>Protobuf(protocol buffer)是Google的结构化数据的数据存放格式(类似于XML, Json)，优点如下：</p>
+<ul>
+<li>序列化体积小，只需要XML的$\frac{1}{10}- \frac{1}{3}$</li>
+<li>解析速度快</li>
+<li>多语言支持</li>
+</ul>
+<h2 id="ProtoBuf描述"><a href="#ProtoBuf描述" class="headerlink" title="ProtoBuf描述"></a>ProtoBuf描述</h2><h3 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h3><p><img src="/img/protobuf/using-flowchart.png" alt=""></p>
 <a id="more"></a>
-<h5 id="network-and-loss"><a href="#network-and-loss" class="headerlink" title="network and loss"></a>network and loss</h5><h6 id="1-network-architecture"><a href="#1-network-architecture" class="headerlink" title="1.network architecture"></a>1.network architecture</h6><p>对于图像的hash提取网络，本文采用了CNN-F，仅对最后一层修改为hash code的提取层，网络结构如下<br>![CNN-F](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 1.jpg)<br>上图中 “LRN” 表示是否使用了 Local Response Normalization 即是否使用正则化处理输出结果，pool为MaxPooling</p>
-<p>对于文本的特征提取，则采用了非常简单的多层感知机模型，同样输出层由hash code提取层替换<br>![MLP](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 2.jpg)</p>
-<h6 id="2-loss"><a href="#2-loss" class="headerlink" title="2.loss"></a>2.loss</h6><p>每次进行实例选取时，会选取3个对象：positive, negative, query，其中query于positive相对于negative更加接近。这样就有了在Face net中于triplet loss相似的本文triplet label likelihood公式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 3.jpg)<br>其中F表示图像提取出的hash code，G表示文本提取出的hash code.<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 4.jpg)<br>这里α为需要调试的hyper-parameter.</p>
-<p>本文中将loss分成3个部分，分别为inter-modal triplet loss, intra-modal triplet loss, graph regularization loss</p>
-<h6 id="inter-modal-triplet-loss"><a href="#inter-modal-triplet-loss" class="headerlink" title="inter-modal triplet loss"></a>inter-modal triplet loss</h6><p>用来区分同一类的不同模态之间的hash code的距离，即用来区分同一类内图像和文本之间的距离。<br>其中，Image to Text 的 inter-modal triplet loss 表示为：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 5.jpg)<br>Text to Image 的 inter-modal triplet loss 表示为：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 6.jpg)<br>这里通过将query对象选取与positive对象同类但不同形态的对象，通过loss的减少来缩短同类型下不同模态对象之间的hash code的hamming distance，同时增加不同类型之间不同模态对象的距离<br>最后 得到的inter-modal triplet loss = J<del>1</del> + J <del>2</del> </p>
-<h6 id="intra-modal-triplet-loss"><a href="#intra-modal-triplet-loss" class="headerlink" title="intra-modal triplet loss"></a>intra-modal triplet loss</h6><p>用来区分同一模态下对象之间的分类距离。<br>其中对于图像类型的对象采用如下计算方式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 7.jpg)<br>对于文本类型对象采用如下计算方式：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 8.jpg)<br>最后得到intra-modal triplet loss = J<del>3</del> + J<del>4</del></p>
-<h6 id="graph-regularization-loss"><a href="#graph-regularization-loss" class="headerlink" title="graph regularization loss"></a>graph regularization loss</h6><p>通过图谱的之间的距离分类，对得到的hash code进行无监督分类</p>
-<p>这里B^x^ B^y^ 分别是从文本模态和图像模态得出的hash code，||A||<del>F</del> 表示矩阵A的Frobenius norm，计算如下：<br>$$<br>||A||<em>F = \sqrt{\sum</em>{i=1}^m\sum_{j=1}^n|a_{i,j}|^2} = \sqrt{tr(A^HA)} \<br>其中A^H为A的共轭矩阵<br>$$<br>L为B的拉普拉斯矩阵（L = D - S 度矩阵 - 邻接矩阵）,γ、η、β为用来平衡的参数，文中并没给出训练时的取值，但给出在验证集上的的取值依次为100，50，1<br>对于图谱的学习过程，可由下式表出：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 10.jpg)</p>
-<p>上述三种loss可以理解为：不同模态之间的距离，同模态之间的距离，得出hash code的聚类距离<br>于是得到我们的目标函数<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 11.jpg)<br>其中B是聚类的hash code， w<del>x</del> 为text模态的权重，w<del>y</del> 为image模态的权重</p>
-<h5 id="3-training"><a href="#3-training" class="headerlink" title="3.training"></a>3.training</h5><p>对于三个目标的优化，本文采用固定两个，优化一个的方式。训练方式如下：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 12.jpg)<br>这里标出了query对象的选取方式，对于每个batch，先对CNN-F进行训练，然后训练MPL模型</p>
-<h6 id="updating-B"><a href="#updating-B" class="headerlink" title="updating B"></a>updating B</h6><p>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 13.jpg)<br>当CNN-F和MPL的参数确定后，就可以用来更新B的输出，此时loss只有graph regularization loss在起作用，这里sign(x) = 1 if x &gt;= 0 else 0<br>identity matrix 为 单位矩阵</p>
-<h6 id="updating-wx"><a href="#updating-wx" class="headerlink" title="updating wx"></a>updating w<del>x</del></h6><p>当B确定的时候，我们按照训练过程，我们首先更新w<del>x</del>的值，通过SGD优化器进行BP优化参数。<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 14.jpg)</p>
-<h6 id="updating-wy"><a href="#updating-wy" class="headerlink" title="updating wy"></a>updating w<del>y</del></h6><p>这里和上述类似，公式如下：<br>![](//img/TDH/triplet-based-deep-hashing-network-for-cross-modal-retrieval 15.jpg)</p>
-<h6 id="triplet-sample"><a href="#triplet-sample" class="headerlink" title="triplet sample"></a>triplet sample</h6><p>对于每次迭代如何选取query对象，这里给出了明确说明。<br>在每次随机选取P个 anchor，然后随机选取M1个正样本和M2个负样本，保证anchor到正样本的距离比到负样本距离短。这样就获得了P * M1 * M2个triplet sample</p>
-<h5 id="performance"><a href="#performance" class="headerlink" title="performance"></a>performance</h5><p>本文对于该方法的表现，发现文本任务的结果比图像任务的结果更好，认为图像中包含的语义较文本更少。</p>
-<h5 id="improve"><a href="#improve" class="headerlink" title="improve"></a>improve</h5><p>个人认为，本文对于图像的特征提取网络模型过于简单，导致认为图像中的语义包含较少，同时对于MPL不能很好的检测出文本的语义时间序列关系。</p>
-<p>由于CNN的特性，导致特征提取的空间关系较弱，建议采用更深的网络结构，同时融合不同感受野下的特征，增强特征空间关系，同时对于深层特征能够跟好的提取。另外应该抛弃全连接层，转而用1×1的卷积来代替，这样能够减少训练耗时。</p>
-<p>对于MPL，本文中的模型虽然较CNN-F能够提取出较多的特征，但由于文本的特性，其特征简单易提取，但MPL有可能忽略的文本中上下文关系，建议采用LSTM结构，对文本特征进行上下文的特征结合，获取更精确的特征。<br>关于Text的特征提取，建议参考《Cross-Modal Scene Networks》 IEEE 2018</p>
+<p>通过.proto文件的数据定义，通过protoc编译到指定语言的实例对象代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc *.proto --cpp_out=.			<span class="comment"># 将.proto文件生成CPP代码到当前路径下</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="proto语法"><a href="#proto语法" class="headerlink" title="proto语法"></a>proto语法</h3><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">"proto3"</span>;	<span class="comment">// 设定使用版本</span></span><br><span class="line"><span class="keyword">package</span> test;		<span class="comment">// 配置当前的package，可以避免名称的冲突，生成代码时也有影响</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"other.proto"</span>	<span class="comment">// 引入其他的proto文件中类型的定义</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">"google/protobuf/any.proto"</span>;	<span class="comment">// 引用任意类型</span></span><br><span class="line"><span class="keyword">option</span> java_package = <span class="string">"com.example.test"</span>; <span class="comment">// 定义当前protobuf转换java的package(自带配置)</span></span><br><span class="line"><span class="keyword">option</span> (test_all) = <span class="literal">true</span>; <span class="comment">// 自定义配置</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">EnumValue</span> </span>&#123;</span><br><span class="line">	<span class="keyword">option</span> allow_alias = <span class="literal">true</span>; <span class="comment">// 允许字段编号重复</span></span><br><span class="line">	RUNING = <span class="number">0</span>;		<span class="comment">// 枚举字段的编号必须从0开始</span></span><br><span class="line">	STOP = <span class="number">1</span>;</span><br><span class="line">	WAITTING = <span class="number">1</span>;	<span class="comment">// 因为允许编号重复</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">TestMessage</span> </span>&#123;</span><br><span class="line">	reserved <span class="number">2</span>, <span class="number">9</span> to <span class="number">11</span>;	<span class="comment">// 禁止使用fieldNumber 2， 9 to 11</span></span><br><span class="line">	reserved <span class="string">"foo"</span>;			<span class="comment">// 禁止使用字段foo</span></span><br><span class="line">	<span class="built_in">double</span> field1 = <span class="number">1</span>;	<span class="comment">// 普通字段: ["repeated"] type name = fieldNumber [fieldOptions]</span></span><br><span class="line">	<span class="keyword">repeated</span> int field2 = <span class="number">5</span>, <span class="number">6</span>;	<span class="comment">// 可重复字段</span></span><br><span class="line">	map&lt;<span class="built_in">int32</span>, <span class="built_in">string</span>&gt; values = <span class="number">7</span>;	<span class="comment">// map类型字段，不能修饰repeated</span></span><br><span class="line">	google.protobuf.Any details = <span class="number">12</span>;<span class="comment">// 任意类型,按照bytes呈现序列化信息,由URL作为唯一标识和元数据</span></span><br><span class="line">	<span class="keyword">oneof</span> field_oneof &#123;		<span class="comment">// 只允许下面一组中只有一个字段出现，可以设置0值，不能与repeated一起使用</span></span><br><span class="line">		<span class="built_in">string</span> name = <span class="number">3</span>;</span><br><span class="line">		<span class="built_in">int64</span> value = <span class="number">4</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	EnumValue enum_value = <span class="number">8</span>;	<span class="comment">// 使用其他类型，该类型在外面定义</span></span><br><span class="line">	<span class="class"><span class="keyword">message</span> <span class="title">NestedMessage</span> </span>&#123;		<span class="comment">// 内部message，通过TestMessage.NestedMessage调用</span></span><br><span class="line">		<span class="built_in">string</span> field = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="字段定义"><a href="#字段定义" class="headerlink" title="字段定义"></a>字段定义</h4><h5 id="field-number"><a href="#field-number" class="headerlink" title="field number"></a>field number</h5><p>每个字段信息都定义一个独立的数字，数字表示该信息在二进制文件的格式，一旦被使用就不再修改。</p>
+<p>1 - 15的field number只使用一个byte来编码，记录类型和field number; 16-2047使用2个byte记录。所以尽量使用1-15的field number元素。</p>
+<h5 id="field-rules"><a href="#field-rules" class="headerlink" title="field rules"></a>field rules</h5><p>Message的field遵循下面俩个标准之一：</p>
+<ul>
+<li>singular: 每个字段只能出现一次或不出现</li>
+<li>repeated: 每个字段可以出现多次，保留重复值的顺序（proto3中repeated field默认按照packed方式编码）</li>
+</ul>
+<h5 id="field-type"><a href="#field-type" class="headerlink" title="field type"></a>field type</h5><table>
+<thead>
+<tr>
+<th>.proto Type</th>
+<th>Note</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>double</td>
+<td>对应其他编程语言的double类型</td>
+<td>0</td>
+</tr>
+<tr>
+<td>float</td>
+<td>对应其他编程语言的float类型</td>
+<td>0</td>
+</tr>
+<tr>
+<td>int32/</td>
+<td>使用变长方式编码，该编码对负值无效，负值使用sint32</td>
+<td>0</td>
+</tr>
+<tr>
+<td>int64</td>
+<td>对应long类型，编码方式和int32一样，负值使用sint64</td>
+<td>0</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>变长方式编码，无符号int32</td>
+<td>0</td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>同上</td>
+<td>0</td>
+</tr>
+<tr>
+<td>sint32</td>
+<td>使用变长方式标记int，对负值有更好的效果</td>
+<td>0</td>
+</tr>
+<tr>
+<td>sint64</td>
+<td>同上</td>
+<td>0</td>
+</tr>
+<tr>
+<td>fixed32</td>
+<td>固定4字节长度的int，适合存放大于$2^{28}$的值</td>
+<td>0</td>
+</tr>
+<tr>
+<td>fixed64</td>
+<td>固定8字节长度的int，适合存放大于$2^{56}$的值</td>
+<td>0</td>
+</tr>
+<tr>
+<td>sfixed32</td>
+<td>固定4字节长度</td>
+<td>0</td>
+</tr>
+<tr>
+<td>sfixed64</td>
+<td>固定8字节长度</td>
+<td>0</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>对应其他编程语言的bool/boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>string</td>
+<td>必须按照UTF-8编码或7-bit的ASCII，长度不能超过$2^{32}$</td>
+<td>“”(空字符串)</td>
+</tr>
+<tr>
+<td>bytes</td>
+<td>可以包含任意的序列，长度不能超过$2^{32}$</td>
+<td>空比特</td>
+</tr>
+</tbody></table>
+<ul>
+<li>int32, uint32, int64, uint64, bool类型之间互相兼容</li>
+<li>sint32, sint64互相兼容</li>
+<li>string bytes(UTF-8编码)互相兼容</li>
+<li>嵌入类型与bytes兼容</li>
+<li>enum与int32, uint32, int64, uint64兼容</li>
+</ul>
+<h5 id="map"><a href="#map" class="headerlink" title="map"></a>map</h5><ul>
+<li>map通过key进行排序</li>
+<li>map不能被修饰为repeated</li>
+<li>合并和拆分时，重复的key按照最后一次出现为准。string解析时如果有重复key则会报错</li>
+</ul>
+<h5 id="Option"><a href="#Option" class="headerlink" title="Option"></a>Option</h5><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">repeated</span> <span class="built_in">int32</span> samples = <span class="number">3</span> [packed=<span class="literal">true</span>];	</span><br><span class="line"><span class="built_in">int32</span> old_field = <span class="number">6</span> [deprecated=<span class="literal">true</span>];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>packed: 如果在repeated字段设置为true，则会使用更复杂的算法编码</li>
+<li>deprecated: 弃用某个字段</li>
+</ul>
+<h4 id="service"><a href="#service" class="headerlink" title="service"></a>service</h4><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchRequest</span> </span>&#123;</span><br><span class="line">	<span class="built_in">string</span> text = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">optional</span> <span class="built_in">int32</span> times = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">SearchResponse</span> </span>&#123;</span><br><span class="line">	<span class="built_in">string</span> text = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">optional</span> <span class="built_in">bool</span> result = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">service</span> <span class="title">SearchService</span> </span>&#123;		<span class="comment">// 定义RPC接口，默认使用gRPC</span></span><br><span class="line">	<span class="function"><span class="keyword">rpc</span> Search (SearchRequest) <span class="keyword">returns</span> (SearchResponse)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的proto文件定义了一个RPC的接口，传入SearchRequest类型数据，返回SearchResponse类型数据。</p>
+<p>对于proto默认使用gRPC，如果</p>
+<h2 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><p>在proto中定义的每个package，在.cc中都是一个namespace；message在.cc中是一个class；enum在.cc中是enum。</p>
+<p>HttpMessage.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">"proto3"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">MessageType</span> </span>&#123;</span><br><span class="line">    REQUEST_RESPONSE_NONE = <span class="number">0</span>;</span><br><span class="line">    REQUEST_HEARTBEAT_SIGNAL = <span class="number">1</span>;</span><br><span class="line">    RESPONSE_HEARTBEAT_RESULT = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">MessageResult</span> </span>&#123;</span><br><span class="line">    <span class="built_in">bool</span> result = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">bytes</span> error_code = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">TopMessage</span> </span>&#123;</span><br><span class="line">    MessageType message_type = <span class="number">1</span>;</span><br><span class="line">    MessageResult message_result = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ServerMessage.proto</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">"proto3"</span>;</span><br><span class="line"><span class="keyword">package</span> server;</span><br><span class="line"><span class="keyword">import</span> <span class="string">"HttpMessage.proto"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">ServerMessage</span> </span>&#123;</span><br><span class="line">    TopMessage http_message = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">string</span> url = <span class="number">2</span>;</span><br><span class="line">    <span class="built_in">int32</span> port = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">oneof</span> connect &#123;</span><br><span class="line">        <span class="built_in">string</span> domain = <span class="number">4</span>;</span><br><span class="line">        <span class="built_in">string</span> ip = <span class="number">5</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>main.cc</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"protobufs/HttpMessage/HttpMessage.pb.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"protobufs/ServerMessage/ServerMessage.pb.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> http &#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SendHeart</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">ReceiveHeart</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;topMessageStr)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">ReceiveHeartResponse</span><span class="params">(<span class="keyword">void</span>* topMessagePtr)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> server &#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SendHeart</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;httpMessageStr)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    http::SendHeart();</span><br><span class="line">    google::protobuf::ShutdownProtobufLibrary();	<span class="comment">// 回收所有protobuf分配的对象</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">http::SendHeart</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    TopMessage topMessage;</span><br><span class="line">    topMessage.set_message_type(REQUEST_HEARTBEAT_SIGNAL);<span class="comment">// 修改message_type</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"send heart "</span> &lt;&lt; topMessage.message_type() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> topMessageStr = topMessage.SerializeAsString();<span class="comment">// 序列化到string</span></span><br><span class="line">    ReceiveHeart(topMessageStr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">http::ReceiveHeart</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;topMessageStr)</span> </span>&#123;</span><br><span class="line">    TopMessage topMessage;</span><br><span class="line">    topMessage.ParseFromString(topMessageStr);	<span class="comment">// 从string解析</span></span><br><span class="line">    <span class="keyword">if</span> (topMessage.message_type() == REQUEST_HEARTBEAT_SIGNAL) &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"request heartbeat singal"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">        TopMessage topMessageResponse;</span><br><span class="line">        MessageResult messageResult;</span><br><span class="line">        messageResult.set_result(<span class="literal">true</span>);</span><br><span class="line">        messageResult.set_error_code(<span class="string">"error"</span>);</span><br><span class="line"></span><br><span class="line">        topMessageResponse.set_message_type(RESPONSE_HEARTBEAT_RESULT);</span><br><span class="line">        topMessageResponse.set_allocated_message_result(&amp;messageResult);</span><br><span class="line">        <span class="keyword">auto</span> *topMessagePtr = <span class="keyword">new</span> TopMessage;</span><br><span class="line">        topMessageResponse.SerializePartialToArray(topMessagePtr, <span class="keyword">sizeof</span>(topMessageResponse)); <span class="comment">// 通过指针数组方式序列化</span></span><br><span class="line">        ReceiveHeartResponse(topMessagePtr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">http::ReceiveHeartResponse</span><span class="params">(<span class="keyword">void</span>* topMessagePtr)</span> </span>&#123;</span><br><span class="line">    TopMessage topMessage;</span><br><span class="line">    topMessage.ParseFromArray(topMessagePtr, <span class="keyword">sizeof</span>(topMessage));</span><br><span class="line">    <span class="keyword">if</span> (topMessage.message_type() == RESPONSE_HEARTBEAT_RESULT) &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"response heartbeat result"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; topMessage.message_result().error_code() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    server::SendHeart(topMessage.SerializeAsString());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">server::SendHeart</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;httpMessageStr)</span> </span>&#123;</span><br><span class="line">    ServerMessage serverMessage;	<span class="comment">// ServerMessage在server namespace下</span></span><br><span class="line">    serverMessage.set_url(<span class="string">"localhost"</span>);</span><br><span class="line">    serverMessage.set_port(<span class="number">9009</span>);</span><br><span class="line">    TopMessage topMessage;</span><br><span class="line">    topMessage.ParseFromString(httpMessageStr);</span><br><span class="line">    serverMessage.set_allocated_http_message(&amp;topMessage);</span><br><span class="line">    serverMessage.SerializeToOstream(&amp;<span class="built_in">std</span>::<span class="built_in">cout</span>); <span class="comment">// 通过流实现序列化</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">send heart 1</span><br><span class="line">request heartbeat singal</span><br><span class="line">response heartbeat result</span><br><span class="line">error</span><br><span class="line"></span><br><span class="line">error	localhost�F</span><br></pre></td></tr></table></figure>
+
+<p>注意序列化得到的string是不可读的，是二进制文件，仅仅为了方便传输。</p>
+<hr>
+<p>message中的字段在cc中的类提供了如下方法：</p>
+<ul>
+<li>获取：字段名         topMessage.message_type()</li>
+<li>修改：set_字段名  set_message_type(REQUEST_HEARTBEAT_SIGNAL)</li>
+<li>判断是否赋值：has_字段名   has_message_type()  返回bool</li>
+<li>修改对象： mutable_字段名(), release_字段名， set_allocated_字段名()</li>
+</ul>
+<p>例如 MessaegResult 中 error_code 的相关操作</p>
+<p><img src="/img/protobuf/error_code.png" alt=""></p>
+<p>MessageResult中result字段的相关操作</p>
+<p><img src="/img/protobuf/result.png" alt=""></p>
+<hr>
+<p>enum在cc文件中被表示成enum类型，每个枚举成员都是一个int类型的值</p>
+<p><img src="/img/protobuf/message_type.png" alt=""></p>
+<hr>
 
       
 
@@ -201,11 +341,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">deep learning</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">cross-modal hashing</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">protobuf</a>
         		</li>
       		
 		</ul>
@@ -261,7 +397,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2019/04/06/Triplet-Based%20Deep%20Hashing%20Network%20for%20Cross-Modal%20Retrieval/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.godder.top/2020/04/23/ProtoBuf/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -275,18 +411,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/11/Multi-Level%20Factorisation%20Net%20for%20Person%20Re-Identi%EF%AC%81cation/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Multi-Level Factorisation Net for Person Re-Identification
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/11/21/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86----%E5%9B%BE%E5%83%8F%E9%87%91%E5%AD%97%E5%A1%94/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">图像处理----图像金字塔</div>
+    <a href="/2020/04/21/C++%E7%AC%94%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">C++学习笔记</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -313,7 +440,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#from-IEEE-2018"><span class="toc-number">1.</span> <span class="toc-text">from IEEE 2018</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#abstract"><span class="toc-number">1.0.1.</span> <span class="toc-text">abstract</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#network-and-loss"><span class="toc-number">1.0.2.</span> <span class="toc-text">network and loss</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-network-architecture"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">1.network architecture</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-loss"><span class="toc-number">1.0.2.2.</span> <span class="toc-text">2.loss</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#inter-modal-triplet-loss"><span class="toc-number">1.0.2.3.</span> <span class="toc-text">inter-modal triplet loss</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#intra-modal-triplet-loss"><span class="toc-number">1.0.2.4.</span> <span class="toc-text">intra-modal triplet loss</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#graph-regularization-loss"><span class="toc-number">1.0.2.5.</span> <span class="toc-text">graph regularization loss</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-training"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.training</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#updating-B"><span class="toc-number">1.0.3.1.</span> <span class="toc-text">updating B</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#updating-wx"><span class="toc-number">1.0.3.2.</span> <span class="toc-text">updating wx</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#updating-wy"><span class="toc-number">1.0.3.3.</span> <span class="toc-text">updating wy</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#triplet-sample"><span class="toc-number">1.0.3.4.</span> <span class="toc-text">triplet sample</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#performance"><span class="toc-number">1.0.4.</span> <span class="toc-text">performance</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#improve"><span class="toc-number">1.0.5.</span> <span class="toc-text">improve</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ProtoBuf描述"><span class="toc-number">1.</span> <span class="toc-text">ProtoBuf描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#执行过程"><span class="toc-number">1.1.</span> <span class="toc-text">执行过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proto语法"><span class="toc-number">1.2.</span> <span class="toc-text">proto语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#字段定义"><span class="toc-number">1.2.1.</span> <span class="toc-text">字段定义</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#field-number"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">field number</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#field-rules"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">field rules</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#field-type"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">field type</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#map"><span class="toc-number">1.2.1.4.</span> <span class="toc-text">map</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Option"><span class="toc-number">1.2.1.5.</span> <span class="toc-text">Option</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#service"><span class="toc-number">1.2.2.</span> <span class="toc-text">service</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实际应用"><span class="toc-number">2.</span> <span class="toc-text">实际应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#C"><span class="toc-number">2.1.</span> <span class="toc-text">C++</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
